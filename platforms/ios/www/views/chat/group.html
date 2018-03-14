@@ -1,0 +1,102 @@
+﻿<div data-role="view" data-title="Group Messages" id="ca-group-messages" data-layout="ca-main-layout" data-use-native-scrolling="true" data-model="CommunityApp.groupMessages.viewModel" data-show="CommunityApp.groupMessages.viewModel.load" data-hide="CommunityApp.groupMessages.viewModel.hide">
+    <div id="container-scroller" data-role="scroller" class="height-22">
+        <div class="width-full padding-5">
+            <center>
+                <button data-bind="visible: hasMoreMessages, events: { click: loadAllMessages }" class="btn btn-default"><span class="km-icon km-arrow-small-up pull-left"></span>&nbsp; Load Previous Messages</button>
+                <div id="message-loading" class="loading display-none"></div>
+            </center>
+        </div>
+        <div id="group-messages-container" class="row margin-0" data-bind="visible: dataBound"></div>
+    </div>
+    <div data-role="content">
+        <div class="message-inputhttp://springmobile.pulsellc.com/categories/photo/11">
+            <form id="message-form" onsubmit="return false;" class="height-full">
+                <input id="file-message-attachment" type="file" class="display-none"/>
+                <button type="button" id="btn-message-attachment" class="km-icon km-attachment pull-left message-button" data-bind="events: {click: attach}"></button>
+                <img data-bind="invisible: hideAttachment, attr: {src: attachmentUrl}" class="thumb-small pull-left margin-13">
+                <canvas id="message-attachment-thumb-new-upload" class="display-none"></canvas>
+                <input type="text" id="message-group" placeholder="Message Group" class="message-text margin-23" data-bind="events: { focus: inputFocus, blur: inputBlur, keyup: inputKeyUp }, value: message"/>
+                <button id="btn-submit-message" type="submit" class="km-icon km-send pull-right message-button display-none"></button>
+                <button id="btn-down" type="button" class="km-icon km-arrow-down pull-right message-button display-none"></button>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="popover" id="popover-options" data-popup='{"width": "15em"}'>
+        <div data-role="view" data-model="CommunityApp.groupMessages.viewModel">
+            <ul data-role="listview">
+                <li><a data-bind="events: {click: gotoAddMembers}">Add Members</a></li>
+                <li data-bind="invisible: isCreator"><a data-bind="events: {click: leave}">Leave Group</a></li>
+                <li><a data-bind="events: {click: viewMembers }">View Members</a></li>
+                <li><a data-bind="events: {click: viewSettings }">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="modalview" id="modalview-memberslist" style="width: 90%; height: 50%">
+        <button class="btn btn-default btn-xs pull-right margin-2 margin-3" data-bind="events: { click: closeMemberSelection}"><i class="glyphicon glyphicon-remove"></i></button>
+        <div class="clearfix"></div>
+        <ul data-role="listview" data-style="inset" data-bind="source: groupMembers" data-template="group-members-template"></ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="groups-messages-tmpl">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+        <div class="display-table width-full border-3 #if(System){# bg-lightgray #}# #if(CreatorIsCurrentUser) {# bg-light-pink #}#">
+            <div class="width-20 display-table-cell">
+                <div class="pos-33 #if(System){#height-26#}#">
+                    <img class="km-medium-thumbnail img-responsive" src="#:CreatorAvatarUrl#" />
+                </div>
+            </div>
+            <div class="width-65 display-table-cell padding-21">
+                <div class="pos-34">
+                    #if(!System){#
+                    <div>
+                        <span class="black bold padding-0">#=CreatorName#</span>
+                    </div>
+                    #}#
+                    <div>
+                        <small class="fontsize-11 #if(System){# color-gray #}#">#=Text#</small>
+                    </div>
+                    #if(Attachment != null){#
+                        #if(Attachment.IsRemote){#
+                        <div class="padding-5">
+                            <img name="img-message-attachment" src="#:Attachment.FileUrl#" class="img-responsive width-full height-27 thumbnail" />
+                        </div>
+                        #}else{#
+                        <div class="padding-5">
+                            <img name="img-message-attachment" src="#:Attachment.FileUrl#?height=200" class="img-responsive width-full height-27 thumbnail" />
+                        </div>
+                        #}#
+                    #}#
+                </div>
+                <div class="pull-right pos-41">
+                    <span class="fontsize-11 color-lightgray">#:CreatedAtFormatted#</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="width-15 display-table-cell-middle">
+                <div>
+                    <a onclick="CommunityApp.groupMessages.viewModel.like(this, '#:GroupId#', '#:Id#', '#:IsFavoritedByCurrentUser#');" class="#if(IsFavoritedByCurrentUser){# display-none #}# "><span class="glyphicon glyphicon-heart-empty red fontsize-16"></span></a>
+                    <a onclick="CommunityApp.groupMessages.viewModel.unlike(this, '#:GroupId#', '#:Id#', '#:IsFavoritedByCurrentUser#');" class="#if(!IsFavoritedByCurrentUser){# display-none #}#"><span class="glyphicon glyphicon-heart red fontsize-16"></span></a>
+                </div>
+                <div>
+                    
+                    <small class="red fontsize-11 pos-35">
+                        #if(FavoritedByMemberIds != null) {#
+                            #: FavoritedByMemberIds.length #
+                        #} else 
+                        {# 0 #}#
+                    </small>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</script>
+
+<script id="group-members-template" type="text/x-kendo-template">
+    <img class="km-small-thumbnail" src="#: UserProfile.AvatarUrl #" />
+    <a onclick="CommunityApp.groupMessages.viewModel.selectMember(this, '#: UserName #');">#: UserProfile.FullName #</a>
+</script>

@@ -1,0 +1,16 @@
+﻿<div data-role="view" data-title="Select Roles" id="ca-chat-add-roles" data-layout="ca-main-layout" class="no-backbutton" data-model="CommunityApp.groupRoles.viewModel" data-show="CommunityApp.groupRoles.viewModel.load">
+    <div data-role="content">
+        <center>
+            <button type="button" class="btn btn-default width-90 margin-3" data-bind="events: { click: selectRoles }"><span class="glyphicon glyphicon-plus"></span>&nbsp;Select Roles</button>
+        </center>
+    </div>
+    <div data-role="scroller" class="height-25">
+        <ul id="roles-container" data-role="listview" class="list-style-none"></ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="roles-tmpl">
+    <li>
+        <label><input type="checkbox" #:Checked# data-roleid="#:Id#" data-rolename="#:Name#" name="role-selector" class="pos-40" onclick="CommunityApp.groupRoles.viewModel.updateSelectedRoles(this);">#:Name#</label>
+    </li>
+</script>

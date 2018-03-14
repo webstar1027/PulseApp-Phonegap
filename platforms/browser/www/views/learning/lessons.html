@@ -1,0 +1,67 @@
+﻿<div data-role="view" data-title="Course Materials" id="ca-course-lessons" data-layout="ca-main-layout" data-model="CommunityApp.courseLessons.viewModel" data-show="CommunityApp.courseLessons.viewModel.load">
+    <div id="lessons-content-top" class="padding-18">
+        <!--<div class="pull-left">
+            <ul id="sort-form-lessons" class="km-small width-3 pos-7 display-inline">
+                <li data-val="1">
+                    Most Recent
+                </li>
+                <li data-val="3">
+                    A-Z
+                </li>
+            </ul>
+        </div>-->
+        <div class="pull-right custom-switch">
+            <small class="font1emBold pos-29">Hide Completed</small>
+            <input type="checkbox" data-role="switch" class="pos-9" data-on-label="Yes" data-off-label="No" data-bind="checked: hideCompleted" data-change="CommunityApp.courseLessons.viewModel.hideCompletedLessons" />
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div data-role="scroller" class="" id="lessons-scroller">
+        <ul data-role="listview" data-style="inset" id="lessons-list" class="plain-list" data-template="lessons-list-tmpl" data-bind="source: courseLessons, visible: dataBound"></ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="lessons-list-tmpl">
+    <div class="row item-container position-relative course-pos">
+        <div class="col-xs-12 padding-0">
+            #if(SCORM != null && SCORM > 0){#
+            <div class="padding-5">
+                <a class="btn btn-success btn-md white width-full" data-bind="events: { click: viewscorm }" data-lessonid="#:Id#" data-scorm="#:SCORM#" data-type="#:Type#">View Lesson</a>
+            </div>
+            #}else if(LearningOnly != null && !LearningOnly){#
+            #}else if(IsPdf){#
+            <img src="#:LearningUrl#.png?height=400" class="pdf-iframe" data-pdfurl="#:LearningUrl#" data-lessonid="#:Id#" data-bind="events: {click: openPDF}" />
+            #}else{#
+            <div class="padding-5">
+                <iframe id="vplayer#:Id#" src="#:LearningUrl#" width="640" height="360" class="vimeo-iframe" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <input type="hidden" name="player" value="#:Id#" />
+                <input type="hidden" name="assignment" />
+            </div>
+            #}#
+            <div class="padding-5">
+                #if(SCORM != null && SCORM > 0){#
+                <h4 class="blue">#:Name#</h4>
+                #}else if(LearningOnly != null && !LearningOnly){#
+                #if(RelativePassedDate != ""){#
+                <h4 class="blue width-75 color-green">#:Name#</h4>
+                #}else{#
+                <a class="display-block no-text-decoration" onclick="CommunityApp.courseLessons.viewModel.page('#:Id#')">
+                    <h4 class="blue width-75">#:Name#</h4>
+                </a>
+                #}#
+                #}else{#
+                    <h4 class="blue">#:Name#</h4>
+                #}#
+                #if(RelativePassedDate != ""){#
+                <h5 class="pull-right pos-11">
+                    <span class="label label-success">Completed #:RelativePassedDate#</span>
+                </h5>
+                #} else {#
+                <h5 class="pull-right pos-11">
+                    <span class="label label-danger">Not Completed</span>
+                </h5>
+                #}#
+            </div>
+        </div>
+    </div>
+</script>

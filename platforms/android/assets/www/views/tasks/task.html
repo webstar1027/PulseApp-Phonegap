@@ -1,0 +1,37 @@
+﻿<div data-role="view" data-title="Task" id="ca-task" data-layout="ca-main-layout" data-model="CommunityApp.task.viewModel" data-show="CommunityApp.task.viewModel.load">
+    <div data-bind="visible: dataBound">
+        <img class="img-responsive width-full" data-bind="attr: { src: taskImageUrl }, visible: showImage" />
+        <div class="padding-5">
+            <h2 data-bind="text: name" class="margin-23 bold"></h2>
+            <div data-bind="html: description" class="margin-23"></div>
+            <label class="label label-primary margin-23" data-bind="text: priority"></label>
+            <div class="margin-23">
+                <small class="bold" data-bind="text: validFromText"></small>
+            </div>
+            <div class="margin-23">
+                <small data-bind="text: validToText" class="red bold"></small>
+            </div>
+            <div data-bind="visible: showActivities">
+                <h2 class="margin-23">Activities</h2>
+                <div id="task-details-container" class="row margin-0"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="task-details-list-tmpl">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="display-table width-full border-3">
+            <div class="padding-19 width-85 display-table-cell">
+                <a href="#:Url#">
+                    <p>#:BadgeParameterName#</p>
+                    <small class="fontsize-11">#:BadgeParameterDescription#</small>
+                </a>
+            </div>
+            <div class="width-15 padding-20 display-table-cell-middle">
+                <a href="#:Url#"><span class="glyphicon glyphicon-menu-right black"></span></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</script>

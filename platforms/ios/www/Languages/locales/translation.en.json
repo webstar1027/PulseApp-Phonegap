@@ -1,0 +1,15 @@
+﻿{
+  "loginTitle": "Login",
+  "btnLogin": "Sign In",
+  "loginUsernameTextBoxPlaceholder": "Username",
+  "loginPasswordTextBoxPlaceholder": "Password",
+  "loadingText": "Loading",
+  "featuredTitle": "Featured",
+  "tabStripText1": "Learning",
+  "tabStripText2": "Resources",
+  "tabStripText3": "Search",
+  "tabStripText4": "The Latest",
+  "tabStripText5": "Notifications",
+  "btnRegister": "Join Now",
+  "acctMsg":  "Don't have an account yet?"
+}

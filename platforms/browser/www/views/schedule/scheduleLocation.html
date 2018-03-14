@@ -1,0 +1,14 @@
+﻿<div data-role="view" data-title="Schedule" id="ca-schedule" data-layout="ca-main-layout" data-model="CommunityApp.scheduleLocation.viewModel"
+	 data-show="CommunityApp.scheduleLocation.viewModel.load" data-stretch="true">
+	<div data-role="content">
+		<div data-bind="visible: topShow" class="padding-12">
+			<div class="padding-5 location-select centerAlign">
+				<h2 class="display-inline-block">Location : </h2>
+				<input id="dropDownLocation" class="margin-17 dropdown-region"/>
+			</div>
+			<div class="padding-1 centerAlign">
+				<a data-role="button" class="fontsize-14 pos-1" data-bind="click: gotoSchedule"><span class="km-icon km-arrow-right-small"></span>View Schedule</a>
+			</div>
+		</div>
+	</div>
+</div>

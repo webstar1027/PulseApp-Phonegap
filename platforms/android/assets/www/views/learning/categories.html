@@ -1,0 +1,47 @@
+﻿<div data-role="view" data-title="Categories" id="ca-learning-categories" data-layout="ca-main-layout" data-model="CommunityApp.learningCategories.viewModel" data-show="CommunityApp.learningCategories.viewModel.load">
+    <div class="">
+        <ul id="sort-form" class="km-small width-full learning-tab">
+            <li data-val="1">
+                Most Recent
+            </li>
+            <li data-val="3">
+                A-Z
+            </li>
+        </ul>
+    </div>
+    <div data-role="scroller" class="height-13" id="learning-categories-scroller">
+        <ul data-role="listview" data-style="inset" id="categories-list" class="plain-list" data-template="categories-list-tmpl" data-bind="source: categories, visible: dataBound"></ul>
+    </div>
+    <div data-role="content" class="darkblue">
+        <ul data-role="listview" data-style="inset">
+            <li class="padding-14">
+                <span>
+                    <a data-role="button" data-bind="events: { click: switchCategories }" class="km-small km-primary km-justified"><span class="km-icon km-categories"></span><span data-bind="text: buttonText"></span></a>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="categories-list-tmpl">
+    <div class="row item-container position-relative category-pos">
+        <div class="col-xs-5 padding-0">
+            <div class="padding-5">
+                <span class="ribbon">#:CurriculumsCount# #if (CurriculumsCount > 1) {#Curriculums #} else {#Curriculum#}#</span>
+                <a href="\#views/learning/curriculums.html?categoryId=#:Id#&type=#:Type#">
+                    <img src="#:Image#" class="img-responsive width-full" />
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-7 padding-0">
+            <div class="padding-5">
+                <a href="\#views/learning/curriculums.html?categoryId=#:Id#&type=#:Type#">
+                    <h4 class="blue">#:Title#</h4>
+                    <p class="fontsize-12 blue">#:Description#</p>
+                </a>
+                <small class="pull-right fontsize-11 blue">#:RelativeDate#</small>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</script>

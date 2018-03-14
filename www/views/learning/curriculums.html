@@ -1,0 +1,67 @@
+﻿<div data-role="view" data-title="Curriculums" id="ca-category-curriculums" data-layout="ca-main-layout" data-model="CommunityApp.categoryCurriculums.viewModel" data-show="CommunityApp.categoryCurriculums.viewModel.load">
+    <div id="curriculums-content-top" class="">
+		<div class="padding-18">
+			<div class="pull-left">
+				<h2 class="font1emBold">Curriculums</h2>
+			</div>
+			<div class="pull-right custom-switch">
+				<small class="font1emBold pos-29">Hide Completed</small>
+				<input type="checkbox" data-role="switch" class="pos-9" data-on-label="Yes" data-off-label="No" data-bind="checked: hideCompleted" data-change="CommunityApp.categoryCurriculums.viewModel.hideCompletedCurriculums" />
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<ul id="sort-form-curriculums" class="km-small width-full learning-tab">
+			<li data-val="1">
+				Most Recent
+			</li>
+			<li data-val="3">
+				A-Z
+			</li>
+		</ul>
+        <div class="clearfix"></div>
+    </div>
+    <div data-role="scroller" class="height-21" id="curriculums-scroller">
+        <ul data-role="listview" data-style="inset" id="curriculums-list" class="plain-list" data-template="curriculums-list-tmpl" data-bind="source: categoryCurriculums, visible: dataBound"></ul>
+    </div>
+    <div data-role="content" class="darkblue">
+        <ul data-role="listview" data-style="inset">
+            <li class="padding-14">
+                <span>
+                    <a data-role="button" data-bind="events: { click: switchCurriculums }" class="km-small km-primary km-justified"><span class="km-icon km-categories"></span><span data-bind="text: buttonText"></span></a>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="curriculums-list-tmpl">
+    <div class="row item-container position-relative curriculums-pos">
+        <div class="col-xs-5 padding-0">
+            <div class="padding-5">
+                <span class="ribbon">#:passed# of #:total# Passed</span>
+                <a href="\#views/learning/courses.html?curriculumId=#:Id#&categoryId=#:CategoryId#&type=#:Type#">
+                    <img src="#:ImageUrl#" class="img-responsive width-full" />
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-7 padding-0">
+            <div class="padding-5">
+                <a href="\#views/learning/courses.html?curriculumId=#:Id#&categoryId=#:CategoryId#&type=#:Type#">
+                    <h4 class="blue">#:Title#</h4>
+                    <p class="fontsize-12 blue">#:Description#</p>
+                </a>
+                #if(IsCompleted){#
+                <h5>
+                    <span class="label label-success">Completed</span>
+                </h5>
+                #} else {#
+                <h5>
+                    <span class="label label-danger">Not Completed</span>
+                </h5>
+                #}#
+                <small class="pull-right fontsize-11 blue">#:RelativeDate#</small>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</script>

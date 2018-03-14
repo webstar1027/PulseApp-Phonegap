@@ -1,0 +1,39 @@
+﻿<div data-role="view" data-title="Featured Learning" id="ca-featured-learning" data-layout="ca-main-layout" data-show="CommunityApp.learning.viewModel.load">
+    <ul data-role="listview" id="featured-learning-listview" class="postsfix" data-template="featured-list-tmpl" data-auto-bind="false" data-endless-scroll="true"></ul>
+</div>  
+
+<script id="featured-list-tmpl" type="text/x-kendo-template">
+    # if(Id > 0) {#
+
+    <article class="feed-article">
+        <div class="info" style="top: 35px !important">
+            #if(PostAttachments != null && PostAttachments[0] != null) {#
+                #if(kendo.toString(PostAttachments[0].FileUrl).indexOf("vimeo") >= 0) {#
+                <iframe src="#:PostAttachments[0].FileUrl#" width="100%" height="200" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                #} else if(kendo.toString(PostAttachments[0].FileUrl).indexOf("youtube") >= 0) {#
+                <iframe width="100%" height="200" src="#:PostAttachments[0].FileUrl#" frameborder="0" allowfullscreen></iframe>
+                #}#
+            #}#
+            <div>
+                <span class="ribbon" style="bottom: 242px !important"><a href="\\#ca-section?sectionId=#:PostThread.ThreadSection.Id#" class="white bold no-text-decoration">#= PostThread.ThreadSection.Name # <span class="glyphicon glyphicon-chevron-right"></span></a></span>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="margin-17 margin-3 height-9">
+            <span class="fontsize-14 color-blue-gray">#:CommunityApp.common.formatSocialMessage(SocialInfo)#</span>
+        </div>
+        <div class="social">
+            <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize margin-3" id="post-actions">
+                # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.learning.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration pull-left"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a></li>
+                #} else {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.learning.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration pull-left"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a></li>
+                #}#
+                <li><a href="\\#ca-post?postId=#:Id#" class="no-text-decoration"><span class="glyphicon glyphicon-comment margin-5"></span>Comment</a></li>
+                <li><a href="\\#ca-share-post?postId=#:Id#" class="no-text-decoration pull-right"><span class="glyphicon glyphicon-share margin-5"></span>Share</a></li>
+            </ul>
+        </div>
+    </article>
+
+    #}#
+</script>

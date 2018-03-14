@@ -1,0 +1,15 @@
+﻿{
+  "loginTitle": "iniciar sesión",
+  "btnLogin": "Continuar",
+  "loginUsernameTextBoxPlaceholder": "Nombre de usuario",
+  "loginPasswordTextBoxPlaceholder": "Contraseña",
+  "loadingText": "Cargando",
+  "featuredTitle":  "Representado",
+  "tabStripText1": "Aprendizaje",
+  "tabStripText2": "Recursos",
+  "tabStripText3":  "Buscar",
+  "tabStripText4":  "Lo último",
+  "tabStripText5":  "Notificaciones",
+  "btnRegister":  "Registro",
+  "acctMsg":  "¿No tiene una cuenta todavía?"
+}

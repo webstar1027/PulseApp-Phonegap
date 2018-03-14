@@ -1,0 +1,54 @@
+﻿<div data-role="view" data-title="Courses" id="ca-curriculum-courses" data-layout="ca-main-layout" data-model="CommunityApp.curriculumCourses.viewModel" data-show="CommunityApp.curriculumCourses.viewModel.load">
+    <div id="courses-content-top" data-role="content" class="">
+		<div class="padding-18">
+			<div class="pull-left">
+				<div class="pull-left">
+					<h2 class="font1emBold">Courses</h2>
+				</div>
+			</div>
+			<div class="pull-right custom-switch">
+				<small class="font1emBold pos-29">Hide Completed</small>
+				<input type="checkbox" data-role="switch" class="pos-9" data-on-label="Yes" data-off-label="No" data-bind="checked: hideCompleted" data-change="CommunityApp.curriculumCourses.viewModel.hideCompletedCourses" />
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<ul id="sort-form-courses" class="km-small width-full learning-tab">
+			<li data-val="1">
+				Most Recent
+			</li>
+			<li data-val="3">
+				A-Z
+			</li>
+		</ul>
+		<div class="clearfix"></div>
+    </div>
+    <div data-role="scroller" class="height-24" id="courses-scroller">
+        <ul data-role="listview" data-style="inset" id="courses-list" class="plain-list" data-template="courses-list-tmpl" data-bind="source: courses, visible: dataBound"></ul>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="courses-list-tmpl">
+    <div class="row item-container position-relative course-pos">
+        <div class="col-xs-12 padding-0">
+            <span class="ribbon">#:CompletedCount# of #:TotalItems# Passed</span>
+            <div class="padding-5">
+                <a class="margin-4 display-block no-text-decoration" href="\#views/learning/lessons.html?curriculumId=#:Id#&categoryId=#:CategoryId#&courseId=#:CourseId#">
+                    <h4 class="blue width-75">#:DisplayName#</h4>
+                </a>
+                #if(IsCompleted){#
+                <h5 class="pull-right">
+                    <span class="label label-success">Completed</span>
+                </h5>
+                #} else {#
+                <h5 class="pull-right">
+                    <span class="label label-danger">Not Completed</span>
+                </h5>
+                #}#
+                <div class="pull-right">
+                    <small class="fontsize-11 blue pos-10">#:RelativeDate#</small>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</script>

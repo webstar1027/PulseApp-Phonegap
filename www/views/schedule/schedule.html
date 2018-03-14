@@ -1,0 +1,48 @@
+﻿<div data-role="view" data-title="Schedule" id="ca-schedule" data-layout="ca-main-layout" data-model="CommunityApp.schedule.viewModel"
+	 data-show="CommunityApp.schedule.viewModel.load" data-stretch="true">
+	<div data-role="content">
+		<div data-bind="visible: topShow">
+			<div class="padding-5 store-select">
+				<h2 class="display-inline-block">Position : </h2>
+				<input id="dropDownPosition" class="margin-17 dropdown-region"/>
+			</div>
+			<div class="padding-5 reportType-select">
+				<div id="weeksSwiper" class="swiper-container">
+					<div class="swiper-wrapper"></div>
+					<div class="swiper-button-next"></div>
+					<div class="swiper-button-prev"></div>
+				</div>
+			</div>
+			<div class="padding-1 schedule-label">
+				<h2>Schedule</h2>
+			</div>
+		</div>
+	</div>
+	<div data-role="scroller" class="height-21" id="userReportsScroller">
+		<div data-bind="visible: dataBound">
+			<div class="">
+				<ul id="day-form" class="km-small width-full learning-tab schedule-tab">
+				</ul>
+			</div>
+			<div  class="margin-18 margin-25">
+				<div id="gridScheduleStaff" class="row margin-0">
+				</div>
+				<div id="gridScheduleEntries" class="row margin-0 margin-14">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="weeks-swiper-tmpl" type="text/x-kendo-template">
+	<div class="swiper-slide">
+		<span data-weekId="#:Id#" data-weekStart="#:WeekStart#">#:FullWeek#</span>
+	</div>
+</script>
+
+<script id="day-tab-tmpl" type="text/x-kendo-template">
+	<li data-val="#:index#">
+		<p>#:DayText#</p>
+		<p>#:DateText#</p>
+	</li>
+</script>

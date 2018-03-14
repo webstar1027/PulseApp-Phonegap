@@ -1,0 +1,2863 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+    <link rel="stylesheet" href="css/kendo/2015Q3/kendo.common.min.css" />
+    <link rel="stylesheet" href="css/kendo/2015Q3/kendo.default.min.css" />
+    <link href="css/kendo/2015Q3/kendo.mobile.all.min.css" rel="stylesheet" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/plugins/swiper.min.css" rel="stylesheet" />
+    <link href="css/build/custom.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="layout" data-id="ca-main-layout" data-show="CommunityApp.main.viewShow" data-hide="CommunityApp.main.viewHide">
+        <header data-role="header">
+            <div data-role="navbar" id="navbar">
+                <a data-role="button" data-rel="drawer" href="#global-drawer" data-icon="drawer-icon" data-align="left"></a>
+                <a data-align="left" data-role="backbutton" class="back-button">Back</a>
+                <span data-role="view-title"></span>
+                <a id="btn-folder-add" data-role="button" data-align="right"><span class="km-icon km-add"></span></a>
+                <a id="btn-share-post" data-role="button" data-align="right"><span class="glyphicon glyphicon-share"></span></a>
+                <a id="btn-thread-add" data-role="button" data-align="right"><span class="km-icon km-add"></span></a>
+                <a id="btn-edit-profile" data-role="button" data-align="right"><span class="km-icon km-compose"></span></a>
+                <a id="btn-clear-notifications" data-role="button" data-align="right" class="pos-23"><span class="capitalize">Clear</span></a>
+                <a data-role="button" data-rel="drawer" href="#right-drawer" data-icon="drawer-icon" data-align="right" class="display-none"></a>
+                <a name="noti-badge" href="#ca-notifications" data-role="button" class="pull-right position-absolute pos-19" data-align="right">
+					<img src="images/bell-img.png">
+                </a>
+                <a id="btn-more" data-role="button" data-align="right" class="pos-36" href="#popover-options" data-rel="popover"><span class="km-icon km-more"></span></a>
+                <a id="btn-add-group" data-role="button" data-align="right" class="pos-39 display-none"><span class="km-icon km-add"></span></a>
+                <a id="btn-add-roles" data-role="button" data-align="right" class="pos-39"><span class="km-icon km-add" style="pointer-events: none"></span></a>
+                <div class="clearfix"></div>
+            </div>
+        </header>
+        <span id="notification" style="display:none;"></span>
+        <footer data-role="footer">
+            <div id="mainTabStrip" data-role="tabstrip" class="km-widget km-tabstrip">
+            </div>
+        </footer>
+    </div>
+
+    <div data-role="drawer" id="global-drawer" style="width: 20em" data-swipe-to-open="false">
+        <ul id="left-drawer-list" data-role="listview" data-type="group" class="km-listview-icons margin-0">
+            <li class="centerAlign">
+                <div></div>
+            </li>
+
+            <li>
+                Account
+                <ul class="display-none-virtual">
+                    <li data-role="listview-link" style="padding: 0 !important;">
+                        <ul id="level-test" data-role="listview" data-type="group" class="km-listview-icons margin-0">
+                            <li class="centerAlign" style="display: none !important;">
+                                <div></div>
+                            </li>
+                            <li>
+                              Test Level 3
+                                <ul class="display-none-virtual">
+                                    <li><a  data-role="listview-link">test 1</a></li>
+                                    <li><a  data-role="listview-link">test 2</a></li>
+                                    <li><a  data-role="listview-link">test 3</a></li>
+                              </ul>
+                            </li>
+                        </ul>
+                    <li><a href="#ca-user-profile" data-role="listview-link">Profile</a></li>
+                    <li><a href="#ca-change-password" data-role="listview-link">Change Password</a></li>
+                    <li><a id="btnLogOff" data-role="listview-link">Log Off</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div data-role="drawer" id="right-drawer" style="width: 7em;" data-title="Share" data-position="right" data-swipe-to-open="false">
+        <div data-role="tabstrip" class="km-vertical-tabstrip">
+            <a href="#views/chat/groups.html" data-icon="comment">
+                Chat
+            </a>
+        </div>
+    </div>
+
+    <span id="popupNotification"></span>
+  
+    <script type="text/x-kendo-template" id="navigation-template">
+        <li class="km-group-container">
+            #if(header != "") {#
+            <div class="km-group-title">
+                <div class="km-text">
+                    #: header #
+                </div>
+            </div>
+            <ul class="km-list display-none-virtual">
+                #for (var i = 0, len = items.length; i < len; i++ ){#
+                <li><a data-role="listview-link" class="km-listview-link" href="${ items[i].url }">${ items[i].title }</a></li>
+                # } #
+            </ul>
+            #} else {#
+            #for (var i = 0, len = items.length; i < len; i++ ){#
+            <div class="km-group-title">
+                <div class="km-text">
+                    <a data-role="listview-link" class="km-listview-link" href="${ items[i].url }">${ items[i].title }</a>
+                </div>
+            </div>
+            # } #
+            #}#
+        </li>
+    </script>
+
+    <script type="text/x-kendo-template" id="bottom-navigation-template">
+        <a href="#:Url#" class="km-button" data-role="tab">
+            <img src="#:Icon#" class="km-image"><span class="km-text">
+                <span>#:Title#</span>
+            </span>
+        </a>
+    </script>
+
+    <script id="errorTemplate" type="text/x-kendo-template">
+        <div class="wrong-pass">
+            <img src="images/error-icon.png" />
+            <h3>#= title #</h3>
+            <p>#= message #</p>
+        </div>
+    </script>
+
+    <script id="successTemplate" type="text/x-kendo-template">
+        <div class="message-success">
+            <img src="images/success-icon.png" />
+            <h3>#= message #</h3>
+        </div>
+    </script>
+
+    <script id="posts-thumbs-list-tmpl" type="text/x-kendo-template">
+        # if(Id > 0) {#
+        <article class="feed-article">
+            <a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                <div class="pull-left">
+                    <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: PostAuthor.UserProfile.FirstName + " " + PostAuthor.UserProfile.LastName #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:(PostAuthor.Title)? PostAuthor.Title : ""#</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:RelativeDate#</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <div class="info">
+                <img src='#:(PostAttachments && PostAttachments.length > 0 && PostAttachments[0].FileUrl != " ")? PostAttachments[0].FileUrl : " images/no-photo-available.png" #' class="thumb-3" />
+                <div class="text-overlay">
+                    <span class="ribbon"><a href="\\#ca-section-posts?sectionId=#:PostThread.ThreadSection.Id#" class="white bold no-text-decoration">#= PostThread.ThreadSection.Name # <span class="glyphicon glyphicon-chevron-right"></span></a></span>
+                    <a class="white no-text-decoration fill" href="\\#ca-post?postId=#:Id#">
+                        <h4 class="bold white">#= Subject #</h4>
+                        <p class="margin-2 fontsize-12 white">#= Body #</p>
+                    </a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="margin-17 margin-3 height-9">
+                <span class="fontsize-14 color-blue-gray">#:CommunityApp.common.formatSocialMessage(SocialInfo)#</span>
+            </div>
+            <div class="social">
+                <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize margin-3 operations-flex" id="post-actions">
+                    # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+                    <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.recentPosts.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration fontsize-13 pull-left"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a></li>
+                    #} else {#
+                    <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.recentPosts.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration fontsize-13 pull-left"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a></li>
+                    #}#
+                    <li><center><a href="\\#ca-comment-add?postId=#:Id#&mode=post" class="no-text-decoration fontsize-13"><span class="glyphicon glyphicon-comment margin-5"></span>Comment</center></a></li>
+                    <li><a href="\\#ca-share-post?postId=#:Id#" class="no-text-decoration pull-right fontsize-13"><span class="glyphicon glyphicon-share margin-5"></span>Share</a></li>
+                </ul>
+            </div>
+
+        </article>
+        #}#
+    </script>
+
+    <script id="posts-thumbs-list-no-user-tmpl" type="text/x-kendo-template">
+        # if(Id > 0) {#
+
+        <article class="feed-article" data-index="#:index#">
+            <a class="blue no-text-decoration fill" href="\\#ca-post?postId=#:Id#">
+                <center>
+                    <img src='#:(PostAttachments && PostAttachments.length > 0 && PostAttachments[0].FileUrl != " ")? PostAttachments[0].FileUrl : " images/no-photo-available.png" #' class="thumb-3" />
+                </center>
+            </a>
+            <div class="info">
+                <div class="margin-17">
+                    <a class="blue no-text-decoration fill" href="\\#ca-post?postId=#:Id#">
+                        <h4 class="bold fontsize-12 black">#= Subject #</h4>
+                        <p class="margin-2 fontsize-12 black">#= Body #</p>
+                    </a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="margin-17 margin-3 height-9">
+                <span class="fontsize-11 color-blue-gray">#:CommunityApp.common.formatSocialMessage(SocialInfo)#</span>
+            </div>
+            <div class="social">
+                <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize margin-3 operations-flex" id="post-actions">
+                    # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+                    <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.sectionPosts.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration pull-left fontsize-13"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a></li>
+                    #} else {#
+                    <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.sectionPosts.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration pull-left fontsize-13"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a></li>
+                    #}#
+                    <li><center><a href="\\#ca-comment-add?postId=#:Id#&mode=post" class="no-text-decoration fontsize-13"><span class="glyphicon glyphicon-comment margin-5"></span>Comment</a></center></li>
+                </ul>
+            </div>
+        </article>
+
+        #}#
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        var CommunityApp = CommunityApp || {};
+
+        window.onload = function () {
+            phonegapApp.initialize();
+        };
+    </script>
+
+    <script src="js/kendo/2015Q3/jquery.min.js"></script>
+    <script src="js/kendo/2015Q3/kendo.all.min.js"></script>
+    <script src="js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/plugins/ion.sound.min.js" type="text/javascript"></script>
+    <script src="js/plugins/jquery.raty.min.js"></script>
+    <script src="js/plugins/underscore-min.1.8.3.js"></script>
+    <script src="js/plugins/swiper.min.js"></script>
+    <script src="js/plugins/jquery.visible.min.js"></script>
+    <script src="js/plugins/vimeo-froogaloop.min.js"></script>
+    <script src="js/plugins/i18next.min.js"></script>
+    <script src="js/plugins/i18next.backend.min.js"></script>
+    <script src="js/plugins/i18next.jquery.min.js"></script>
+    <script src="js/plugins/jquery.zoomooz.min.js"></script>
+    <script src="js/plugins/load-image.all.min.js"></script>
+    <script src="js/build/js/app.min.js"></script>
+
+    <script type="text/javascript">
+        function deviceReadyCallBack() {
+            CommunityApp.main.initializeApp();
+        }
+    </script>   
+    <!--views-->
+    <div data-role="view" data-title="The Latest" id="ca-home-main-view" data-layout="ca-main-layout" class="no-backbutton" data-show="CommunityApp.recentPosts.viewModel.refresh" data-model="CommunityApp.recentPosts.viewModel">
+        <div id="recentPostBannerSwiper" class="swiper-container">
+            <div class="swiper-wrapper"></div>
+			<div class="swiper-pagination"></div>
+        </div>
+        <div>
+            <ul id="latest-select" class="km-small width-full learning-tab margin-35">
+                <li>
+                    Articles
+                </li>
+                <li>
+                    Discussions
+                </li>
+                <li data-bind="visible: showStatusUpdate">
+                    Status Update
+                </li>
+            </ul>
+        </div>
+        <div id="recent-posts-list" class="row margin-0">
+            <div class="row margin-0 padding-0 shop-samsung-link">
+                
+            </div>
+            <div class="container-fluid padding-0"></div>
+        </div>
+        <div id="recent-discussions-list" class="row margin-0 forums">
+            <div class="container-fluid padding-0"></div>
+        </div>
+        <div id="recent-status-update-list" class="row margin-0">
+            <div class="container-fluid padding-0"></div>
+        </div>
+    </div>
+    
+    <script id="status-list-tmpl" type="text/x-kendo-template">
+        <div class="status-item #:class_name# margin-36" data-index="#:index#">
+        <div class="padding-4">
+            <a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                <div class="pull-left">
+                    <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: PostAuthor.UserProfile.FirstName + " " + PostAuthor.UserProfile.LastName #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:PostAuthor.UserProfile.Title#</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:RelativeDate#</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+        </div>
+        <div class="clearfix"></div>
+        # if(CommunityApp.base.baseData.currentUser().id == PostAuthor.Id) {#
+        <a data-role="button" data-align="right" href="\\#actionsPopOver_#:Id#" data-rel="popover" data-icon="actions-vertical" class="pull-right borderless status-actions"></a>
+        #}#
+        <a href="\\#ca-post?postId=#:Id#&mode=status" class="pull-left width-full no-text-decoration">
+        <h3>#: Body#</h3>
+        #if (PostAttachments[0] != null) {#
+        <img src="#: PostAttachments[0].FileUrl#" style="max-width: 100%">
+        #}#
+        </a>
+        <div class="clearfix"></div>
+        <div class="social-info-container margin-3 margin-9">
+            <a href="\\#ca-post?postId=#:Id#&mode=status">
+                <small class="social-info">
+                    # if (SocialInfo !== null && SocialInfo.LikesCount > 1) {#
+                    #:SocialInfo.LikesCount# Likes
+                    # } else if (SocialInfo.LikesCount == 1) { #
+                    1 Like
+                    #}#
+                </small>
+                <small class="social-info margin-6">
+                    #if(SocialInfo !== null && SocialInfo.CommentsCount > 1){#
+                    #:SocialInfo.CommentsCount# Comments
+                    # } else if(SocialInfo.CommentsCount == 1) {#
+                    1 Comment
+                    #}#
+                </small>
+            </a>
+        </div>
+        <div class="social">
+            <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize" id="statusActions">
+                # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart-empty margin-5"></span>Unlike</a></li>
+                #} else {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart margin-5"></span>Like</a></li>
+                #}#
+                <li><a href="\\#ca-comment-add?postId=#:Id#&mode=status" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5"></span>Comment</a></li>
+            </ul>
+        </div>
+        </div>
+    </script>
+
+    <script id="posts-thumbs-flip-tmpl" type="text/x-kendo-template">
+        # if(Id > 0) {#
+        <div class="row disc-item width-full margin-0 latest-item-container" data-index="#:index#">
+            <div class="col-xs-6 padding-0 #:(index % 2 == 0)? '' : 'pull-right'#">
+                <a href="\\#ca-post?postId=#:Id#">
+                    <img src='#:(AttachmentUrl != " " && AttachmentUrl != "" && IsPostAttachmentImage)? AttachmentUrl : " images/no-photo-available.png"#' class="img-responsive height-16" />
+                </a>
+            </div>
+            <div class="col-xs-6 post-info">
+                <div class="">
+                    <div class="margin-3">
+                        <a href="\\#ca-section-posts?sectionId=#:SectionId#">
+                            <span class="black fontsize-12">#:SectionName#</span>
+                        </a>
+                    </div>
+                    <div class="margin-13">
+                        <a href="\\#ca-post?postId=#:Id#">
+                            <p class="black bold fontsize-14">#:Subject#</p>
+                            <p class="text-multiline-truncate">#:Body#</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="margin-3 padding-11 pull-right pos-26">
+                    <a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.recentPosts.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration fontsize-13 black #:(SocialInfo !== null && SocialInfo.UserLiked)? '' : 'display-none'#"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike #if (SocialInfo.LikesCount > 0) {# (#:SocialInfo.LikesCount#) #}#</a>
+                    <a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.recentPosts.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration fontsize-13 black #:(SocialInfo !== null && SocialInfo.UserLiked)? 'display-none' : ''#"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like #if (SocialInfo.LikesCount > 0) {# (#:SocialInfo.LikesCount#) #}#</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        #}#
+    </script>
+
+    <script id="recent-posts-banner-tmpl" type="text/x-kendo-template">
+        <div class="swiper-slide">
+            <div class="bannerImageWrapper" style="">
+                <a href="#:Url#">
+                    <img class="width-full" src="#:ImageUrl#" />
+                </a>
+            </div>
+        </div>
+    </script>
+	
+	<div data-role="view" data-title="Quick Poll" id="ca-poll-view" data-layout="ca-main-layout" data-show="CommunityApp.poll.viewModel.load" data-model="CommunityApp.poll.viewModel">
+		<div data-bind="visible: dataBound" class="poll-action">
+			<div data-bind="visible: hasPrevPoll" class="prev-poll">
+				<a data-bind="attr: {href: prevPollPage}">
+					<span class="glyphicon glyphicon-menu-left"></span><span>Prev</span>
+				</a>
+			</div>
+			<div data-bind="visible: hasNextPoll" class="next-poll">
+				<a data-bind="attr: {href: nextPollPage}">
+					<span>Next</span><span class="glyphicon glyphicon-menu-right"></span>
+				</a>
+			</div>
+		</div>
+		<div data-bind="visible: noPoll" class="margin-30 padding-17">
+			<h2 class="centerAlign uppercase font1emBold">No Active Poll</h4>
+		</div>
+		<div data-bind="visible: dataBound" class="margin-30 padding-17">
+			<h2 data-bind="html: description" class="centerAlign"></h4>
+		</div>
+		<center data-bind="visible: dataBound">
+			<small data-bind="text: userCountText"></small>
+		</center>
+		<div id="poll-items-list" data-bind="visible: unansweredPoll" class="padding-17 margin-1">
+			<form id="poll-vote-form" onsubmit="return false;">
+				<ul class="poll-item-fieldlist">
+				</ul>
+				<button type="submit" class="btn btn-primary width-full padding-5 bold">Vote</button>
+			</form>
+		</div>
+		<div data-bind="invisible: unansweredPoll">
+			<div id="poll-chart" data-bind="visible: showChart" class="poll-chart">
+			</div>
+			<div id="poll-legend" data-bind="visible: showChart" class="centerAlign">
+				<ul class="poll-legend">
+				</ul>
+			</div>
+		</div>
+		<center data-bind="visible: dataBound" class="margin-27">
+			<small data-bind="text: createdDate"></small>
+		</center>
+	</div>
+	
+	<script id="poll-legend-item-tmpl" type="text/x-kendo-template">
+		<li class="poll-legend-item">
+			<div class="poll-legend-color" style="background: #:Color#"></div>
+			<span class="poll-legend-category">#:Name# (#:Value#%)</span>
+		</li>
+	</script>
+	
+	<div id="poll-dialog" class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto; display: none;">
+		<div id="poll-dialog-items-list" style="padding: 0 1em;">
+			<div class="container-fluid padding-0">
+				<h4 id="poll-dialog-question"></h4>
+				<ul class="poll-item-fieldlist">
+				</ul>
+			</div>
+		</div>
+		<div class="k-edit-buttons k-state-default">
+			<button class="k-dialog-insert k-button k-primary">Post</button>
+		</div>
+	</div>
+	
+	<script id="poll-item-tmpl" type="text/x-kendo-template">
+		<li>
+			<input type="radio" name="pollItem" id="pollItem_#:Id#" value="#:Choice#" class="k-radio">
+			<label class="k-radio-label" for="pollItem_#:Id#">#:Choice#</label>
+		</li>
+	</script>
+	
+	<div data-role="view" data-title="Survey" id="ca-survey-view" data-layout="ca-main-layout" data-show="CommunityApp.survey.viewModel.load" data-model="CommunityApp.survey.viewModel">
+		<div data-bind="visible: dataBound" class="margin-1 padding-17">
+			<h1 data-bind="html: surveyName" class="centerAlign font1emBold"></h1>
+			<h2 data-bind="html: surveyDescription" class="centerAlign"></h4>
+			<h2 data-bind="html: question" class="margin-1"></h2>
+		</div>
+		<div id="survey-items-list" data-bind="visible: visibleList" class="padding-17 margin-1">
+			<form id="survey-vote-form" onsubmit="return false;">
+				<ul class="survey-item-fieldlist">
+				</ul>
+			</form>
+		</div>
+		<div data-bind="visible: dataBound" class="poll-action">
+			<div class="prev-poll">
+				<button id='btnExitSurvey' class='question-button btn btn-primary bg-black pull-left display-none' data-role='button' data-bind="invisible: isSuccessScreen" class="font1emBold" onclick='CommunityApp.survey.viewModel.onExitClick();'>Exit</button>
+			</div>
+			<div class="next-poll" data-bind="invisible: noSurvey">
+				<button id='btnNextSurvey' class='question-button btn btn-primary bg-black pull-right' data-role='button' data-bind="invisible: isLastQuestion" class="font1emBold" onclick='CommunityApp.survey.viewModel.onNextQuestionClick();'>Next</button>
+				<button id='btnNextSurvey' class='question-button btn btn-primary bg-black pull-right' data-role='button' data-bind="visible: isLastQuestion" class="font1emBold" onclick='CommunityApp.survey.viewModel.onNextQuestionClick();'>Finish</button>
+			</div>
+		</div>
+		<center data-bind="visible: isSuccessScreen">
+			<button id='btnExitSurvey' class='question-button btn btn-primary bg-black' data-role='button' class="font1emBold" onclick='CommunityApp.survey.viewModel.onExitClick();'>Finish</button>
+		</center>
+	</div>
+	
+	<script id="survey-type0-item-tmpl" type="text/x-kendo-template">
+		<li>
+			<input type="radio" name="surveyItem" id="surveyItem_#:Id#" value="#:AnsOption#" data-id="#:Id#" class="k-radio">
+			<label class="k-radio-label" for="surveyItem_#:Id#">#:AnsOption#</label>
+		</li>
+	</script>
+	<script id="survey-type1-item-tmpl" type="text/x-kendo-template">
+		<li>
+			<input type="checkbox" name="surveyItem" id="surveyItem_#:Id#" value="#:AnsOption#" data-id="#:Id#" class="k-checkbox">
+			<label class="k-checkbox-label" for="surveyItem_#:Id#">#:AnsOption#</label>
+		</li>
+	</script>
+	<script id="survey-type3-item-tmpl" type="text/x-kendo-template">
+		<li>
+			<input type="text" name="surveyItem" id="surveyItem_#:Id#" data-id="#:Id#" placeholder = "Type your answer">
+		</li>
+	</script>
+	<script id="survey-type4-item-tmpl" type="text/x-kendo-template">
+		<li>
+			<textarea name="surveyItem" id="surveyItem_#:Id#" data-id="#:Id#" placeholder = "Type your answer"></textarea>
+		</li>
+	</script>
+	<script id="survey-type5-item-tmpl" type="text/x-kendo-template">
+		<li class="margin-9">
+			<input name="surveyItem" id="surveyItem_#:Id#" data-id="#:Id#" style="width: 60px">
+			<label class="margin-17">#:AnsOption#</label>
+		</li>
+	</script>
+    <div data-role="view" id="ca-home-main-view-hot" data-title="Featured Promotions" data-layout="ca-main-layout" class="no-backbutton" data-model="CommunityApp.hotPosts.viewModel" data-show="CommunityApp.hotPosts.viewModel.refresh">
+        <div id="hot-posts-list" class="row margin-0">
+            <div class="container-fluid padding-0"></div>
+        </div>
+    </div>
+
+    <div data-role="view" id="ca-login-view" data-title="Home" data-model="CommunityApp.userAccount.viewModel" data-i18n="[data-title]loginTitle" class="no-backbutton login" data-show="CommunityApp.userAccount.viewModel.loadLogin">
+        <!--<video playsinline autoplay muted loop id="bgvid">
+            <source src="videos/welcome.mp4" type="video/mp4">
+        </video>-->
+        <div class="login-first-container">
+            <center>
+                <a data-role="button" id="user-acc-login-button" onclick="CommunityApp.userAccount.viewModel.joinNowRedirect()" class="login-btn register white opacity-1 width-92" data-i18n="btnRegister"></a><br /><br /><br />
+                <a href="#ca-login-second" class="margin-3 light-gray no-text-decoration">Sign In</a>
+            </center>
+        </div>
+    </div>
+
+    <div data-role="view" id="ca-login-second" data-title="Login" data-model="CommunityApp.userAccount.viewModel" data-show="CommunityApp.userAccount.viewModel.loadLogin">
+        <div class="loginoverlay"></div>
+        <form id="loginForm" class="display-none" onsubmit="return false;">
+            <ul data-role="listview" data-style="inset" style="padding: 50px 20px 0 20px">
+                <li>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <input type="text" data-bind="value: userName" id="user-acc-username" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Username is required');" data-i18n="[placeholder]loginUsernameTextBoxPlaceholder" required class="width-full login-txt" />
+                    </div>
+                </li>
+                <li>
+                    <div class="inner-addon left-addon margin-3">
+                        <i class="glyphicon glyphicon-lock"></i>
+                        <input type="password" data-bind="value: password" id="user-acc-password" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Password is required');" data-i18n="[placeholder]loginPasswordTextBoxPlaceholder" required class="width-full login-txt" />
+                    </div>
+                </li>
+            </ul>
+            <div class="centerAlign margin-1">
+                <button type="submit" id="user-acc-login-button" data-i18n="btnLogin" class="login-btn register white opacity-1 width-92 km-widget km-button capitalize"></button>
+            </div>
+            <div class="centerAlign margin-1">
+                <a href="#ca-employee-resetpwd" class="capitalize pull-left white no-text-decoration pos-16">Forgot Password</a>
+                <a data-bind="visible: showHelpDesk" class="capitalize white no-text-decoration pos-30" onclick="CommunityApp.userAccount.viewModel.gotoHelpDesk();">Help Desk</a>
+                <a href="#ca-login-view" class="capitalize pull-right white no-text-decoration pos-17">Cancel</a>
+                <div class="clearfix"></div>
+            </div>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Verify" id="ca-employee-verify" data-model="CommunityApp.registration.viewModel" data-show="CommunityApp.registration.viewModel.loadVerify">
+        <div class="loginoverlay"></div>
+        <form id="verifyForm" class="loginform" onsubmit="return false;">
+            <div>
+                <ul data-role="listview" data-style="inset" style="padding: 50px 20px 0 20px">
+                    <li>
+                        <div class="inner-addon left-addon margin-3">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            <input type="text" data-bind="value: code" placeholder="Verification Code" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Verification code is required');" required class="width-full login-txt" />
+                        </div>
+                    </li>
+                </ul>
+                <div class="margin-1">
+                    <center>
+                        <button type="submit" class="login-btn register white opacity-1 width-92 km-widget km-button capitalize"><span class="km-icon km-key display-inline-block"></span>&nbsp;Verify</button>
+                    </center>
+                </div>
+                <div class="centerAlign margin-1">
+                    <a href="#ca-login-view" class="capitalize pull-right light-gray no-text-decoration pos-16 white">Cancel</a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Reset Password" id="ca-employee-resetpwd" data-model="CommunityApp.registration.viewModel" data-show="CommunityApp.registration.viewModel.loadResetPassword">
+        <div class="loginoverlay"></div>
+        <form id="resetPasswordForm" class="loginform" onsubmit="return false;">
+            <div>
+                <ul data-role="listview" data-style="inset" style="padding: 50px 20px 0 20px">
+                    <li>
+                        <div class="inner-addon left-addon margin-3">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            <input type="text" data-bind="value: email" placeholder="Username or Email" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Username is required');" required class="width-full login-txt" />
+                        </div>
+                    </li>
+                </ul>
+                <div class="margin-1">
+                    <center>
+                        <button type="submit" class="login-btn register white opacity-1 width-92 km-widget km-button capitalize"><span class="km-icon km-key display-inline-block"></span>&nbsp;Reset</button>
+                    </center>
+                </div>
+                <div class="centerAlign margin-1">
+                    <a href="#ca-login-view" class="capitalize pull-left light-gray no-text-decoration pos-16 white">Cancel</a>
+                    <a href="#ca-login-second" class="capitalize pull-right light-gray no-text-decoration pos-17 white">Sign In</a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Register" id="ca-employee-registration" data-model="CommunityApp.registration.viewModel" data-show="CommunityApp.registration.viewModel.loadRegistration">
+        <div class="loginoverlay"></div>
+        <form id="registrationForm" class="loginform" onsubmit="return false;">
+            <ul id="registration-form" data-role="listview" data-style="inset" style="padding: 0 20px 0 20px">
+                <li>
+                    <div class="inner-addon left-addon margin-3 margin-34">
+                        <b class="white">Region</b>
+                        <span class="pull-right pos-17 white" data-bind="text: company"></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </li>
+                <li data-bind="visible: storeNamesFound">
+                    <div class="inner-addon left-addon margin-3">
+                        <input type="text" list="storeNames" data-bind="value: inputStoreName" placeholder="Store Name" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Store name is required');" class="width-full login-txt padding-15">
+                        <datalist id="storeNames" data-bind="source: storeNames" data-template="store-names-template"></datalist>
+                    </div>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input type="text" list="jobTitles" data-bind="value: jobTitle" placeholder="Job Title" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Job Title is required');" class="width-full login-txt padding-15">
+                        <datalist id="jobTitles" data-bind="source: jobTitles" data-template="job-titles-template"></datalist>
+                    </div>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input id='registerATTUID' type="text" data-bind="value: employeeId" placeholder="ATTUID#" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'ATTUID# is required');" class="width-full login-txt padding-15" />
+                    </div>
+                    <span id="errorATT" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input id="registerFirstName" type="text" data-bind="value: firstName" placeholder="First Name" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'First name is required');" class="width-full login-txt padding-15" />
+                    </div>
+                    <span id="errorFirstName" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input id="registerLastName" type="text" data-bind="value: lastName" placeholder="Last Name" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Last name is required');" class="width-full login-txt padding-15" />
+                    </div>
+                    <span id="errorLastName" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input id="registerEmail" type="email" data-bind="value: email" placeholder="Email" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Missing or invalid email');" class="width-full login-txt padding-15" />
+                    </div>
+                    <span id="errorEmail" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+                <li data-bind="invisible: confirmPasswordFocus">
+                    <div class="inner-addon left-addon margin-3">
+                        <input id="regPassword" type="password" data-bind="value: password" pattern=".{6,}" title="Minimum 6 characters" placeholder="Password" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Password is required');" class="width-75 login-txt padding-15" />
+                        <a class="pull-right white show-password-but" onClick="CommunityApp.registration.viewModel.showPassword(this)">[Show]</a>
+                    </div>
+                    <span id="errorPassword" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+                <li>
+                    <div class="inner-addon left-addon margin-3">
+                        <input id="regConfirmPassword" type="password" data-bind="value: confirmPassword, events: { focus : fieldFocus, blur: fieldBlur }" pattern=".{6,}" title="Minimum 6 characters" placeholder="Confirm Password" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Confirm password is required');" class="width-75 login-txt padding-15" />
+                        <a class="pull-right white show-password-but" onClick="CommunityApp.registration.viewModel.showConfirmPassword(this)">[Show]</a>
+                    </div>
+                    <span id="errorConfirmPassword" class="white" style="font-size: 0.6em; display: none">This field is required.</span>
+                </li>
+            </ul>
+            <div class="margin-1">
+                <center>
+                    <button type="submit" class="login-btn register white opacity-1 width-92 km-widget km-button capitalize"><span class="km-icon km-person display-inline-block"></span>&nbsp;Register</button>
+                </center>
+            </div>
+            <div class="margin-1">
+                <a href="#ca-login-view" class="capitalize pull-left light-gray pos-16 no-text-decoration white">Cancel</a>
+                <a href="#ca-login-second" class="capitalize pull-right light-gray pos-17 no-text-decoration white">Sign In</a>
+                <div class="clearfix"></div>
+            </div>
+        </form>
+    </div>
+
+    <script id="store-codes-template" type="text/x-kendo-template">
+        <option value="#:Code#">#:Code#</option>
+    </script>
+
+    <script id="job-titles-template" type="text/x-kendo-template">
+        <option value="#:Job#" data-code="#:Job#">#:Job#</option>
+    </script>
+    
+    <script id="store-names-template" type="text/x-kendo-template">
+        <option value="#:Store#" data-code="#:StoreCode#">#:Store#</option>
+    </script>
+
+    <div data-role="view" id="ca-loading-view" data-title="Loading" class="no-backbutton login" data-show="CommunityApp.sync.process" data-hide="CommunityApp.sync.processComplete">
+        <div class="loading-content">
+            <h2 class="white" data-i18n="loadingText"></h2>
+        </div>
+        <div class="loading-beats"></div>
+    </div>
+
+    <div data-role="view" id="ca-updating-view" data-title="Loading" class="no-backbutton login">
+        <div class="loading-content">
+            <h2 class="white">Updating...</h2>
+            <p class="white">The app is being updated. please do not close or leave the app until the new update is installed</p>
+        </div>
+        <div class="loading-beats"></div>
+    </div>
+
+    <div data-role="view" data-title="Resources" id="ca-library-toplevel" data-layout="ca-main-layout" data-show="CommunityApp.library.viewModel.load" data-model="CommunityApp.library.viewModel">
+        <div id="toplevels" class="row margin-0" data-bind="invisible: inprogress">
+            <div class="container-fluid padding-0"></div>
+        </div>
+    </div>
+
+    <script id="toplevel-list-tmpl" type="text/x-kendo-template">
+        <a href="\\#ca-library?libraryId=#:Id#">
+            <div class="row disc-item width-full margin-0">
+                <div class="col-xs-5 padding-0">
+                    <img src="#:IconUrl#" class="img-responsive" />
+                </div>
+                <div class="col-xs-7 padding-0 folder-info">
+                    <div class="width-75">
+                        <div class="margin-1">
+                            <span class="black bold fontsize-14">#:Name#</span>
+                        </div>
+                        <div class="margin-3 uppercase">
+                            <small class="black fontsize-11"><span class="fontsize-11 km-icon km-folder pull-left"></span>&nbsp;#=TotalFolders# #if(TotalFolders>1) {# folders  #} else {# folder #}#</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </script>
+
+    <div data-role="view" data-title="Resources" id="ca-library" data-layout="ca-main-layout" data-show="CommunityApp.libraryFolders.viewModel.load" data-model="CommunityApp.libraryFolders.viewModel">
+        <div data-bind="invisible: inprogress">
+            <h2 class="centerAlign margin-1" data-bind="html: name"></h2>
+            <p class="centerAlign margin-1" data-bind="text: description"></p>
+            <div id="library-folders" class="row margin-0">
+                <div class="container-fluid padding-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <script id="library-folders-tmpl" type="text/x-kendo-template">
+        <div class="col-xs-6 col-sm-4 col-md-2 padding-0">
+            <div class="folder-item thumbnail margin-27" data-index="#:index#">
+                <div>
+                    <div class="bordertri"></div>
+                    <small class="fontsize-11 pull-left folder-ribbon-small">#if(HasSubfolders) {# #:TotalSubfolders# #} else {# #:TotalFiles# #}# <span class="fontsize-11 km-icon pull-left #if(HasSubfolders) {# km-folder #} else {# km-gallery #}#"></span></small>
+                </div>
+                <a onclick="CommunityApp.libraryFolders.viewModel.folderRedirect('#:Id#', '#:HasSubfolders#', '#:SectionId#')">
+                    <img src="#:IconUrl#" class="thumb" />
+                    <h5 class="height-7 margin-13 title white bold">#=Title#</h5>
+                </a>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Resources" id="ca-library-files" data-layout="ca-main-layout" data-show="CommunityApp.libraryFolderFiles.viewModel.load" data-model="CommunityApp.libraryFolderFiles.viewModel">
+        <div data-bind="invisible: inprogress">
+            <h2 class="centerAlign margin-1" data-bind="html: title"></h2>
+            <p class="centerAlign margin-1" data-bind="text: description"></p>
+            <div id="library-folder-files" class="row margin-1 margin-16">
+                <div class="container-fluid padding-0 items"></div>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Resources" id="ca-library-subfolders" data-layout="ca-main-layout" data-show="CommunityApp.librarySubfolders.viewModel.load" data-model="CommunityApp.librarySubfolders.viewModel">
+        <div id="library-subfolder-files-container" data-bind="invisible: inprogress">
+            <ul id="select-view" class="km-small width-3" data-bind="invisible: noSubfolders">
+                <li id="select-folder">
+                    Folders
+                </li>
+                <li id="select-file" data-bind="invisible: noFiles">
+                    Files
+                </li>
+            </ul>
+            <h2 class="centerAlign margin-1" data-bind="html: title"></h2>
+            <p class="centerAlign margin-1" data-bind="text: description"></p>
+            <div id="library-subfolders" class="row margin-0 km-listview">
+                <div class="container-fluid padding-0"></div>
+            </div>
+            <div id="library-files" class="row margin-3 km-listview width-full">
+                <div class="container-fluid padding-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <script id="library-subfolders-tmpl" type="text/x-kendo-template">
+        <div class="col-xs-6 col-sm-4 padding-0">
+            <div class="folder-item thumbnail margin-15" data-index="#:index#">
+                <div>
+                    <div class="bordertri"></div>
+                    <small class="fontsize-11 pull-left subfolder-ribbon-small">#if(HasSubfolders) {# #:TotalSubfolders# #} else {# #:TotalFiles# #}# <span class="fontsize-11 km-icon pull-left #if(HasSubfolders) {# km-folder #} else {# km-gallery #}#"></span></small>
+                </div>
+                <a onclick="CommunityApp.librarySubfolders.viewModel.folderRedirect('#:Id#', '#:HasSubfolders#', '#:SectionId#')">
+                    <img src="#:IconUrl#?width=200&height=200" class="thumb" />
+                    <h5 class="height-7 margin-13 title white bold">#=Title#</h5>
+                </a>
+            </div>
+        </div>
+    </script>
+
+    <script id="library-folder-files-tmpl" type="text/x-kendo-template">
+        <div class="col-xs-6 col-sm-3 col-md-2 padding-0 margin-23">
+            <div style="position: relative">
+                <center>
+                    #if(MediaGalleryFilePost.PostAttachments && MediaGalleryFilePost.PostAttachments.length > 0 && MediaGalleryFilePost.PostAttachments[0] && MediaGalleryFilePost.PostAttachments[0] != null){#
+                    <a class="" onclick="CommunityApp.libraryFolderFiles.viewModel.filesRedirect('#:FolderId#', '#:MediaGalleryFilePost.SectionId#', '#:index#', '#:Type#', '#:MediaGalleryFilePost.PostAttachments[0].FileUrl#')">
+                        #} else {#
+                        <a class="" onclick="CommunityApp.libraryFolderFiles.viewModel.filesRedirect('#:FolderId#', '#:MediaGalleryFilePost.SectionId#', '#:index#', '#:Type#', null, '#:MediaGalleryFilePost.Id#')">
+                            #}#
+                            #if(VideoThumbnailUrl != null) {#
+                            <div class="image-item downlay" style="background: url('http://#:CommunityApp.configuration.appConfig.domain##:VideoThumbnailUrl#')" data-index="#:index#">
+                                #} else {#
+                                #if(Type != "Image"){#
+                                <div class="image-item downlay" style="background: url('#:IconUrl#')" data-index="#:index#">
+                                    #}else{#
+                                    #if(MediaGalleryFilePost.PostAttachments && MediaGalleryFilePost.PostAttachments.length > 0 && MediaGalleryFilePost.PostAttachments[0] && MediaGalleryFilePost.PostAttachments[0] != null){#
+                                    <div class="image-item downlay" style="background: url('#:MediaGalleryFilePost.PostAttachments[0].FileUrl#?width=160')" data-index="#:index#">
+                                        #} else {#
+                                        <div class="image-item downlay" style="background: url('#:IconUrl#?width=160')" data-index="#:index#">
+                                            #}#
+                                            #}#
+                                            #}#
+                                        </div>
+                        </a>
+                        <div class="file-info-container padding-4 breakword">
+                            <a href="\\#ca-user-profile?userId=#:MediaGalleryFilePost.PostAuthor.UserProfile.UserId#">
+                                <div class="image-avatar">
+                                    <img src="#:MediaGalleryFilePost.PostAuthor.UserProfile.AvatarUrl#">
+                                    <!--img src="http://samsungpro.net/filestorage/CommunityServer.Components.Avatars/00/00/00/53/83/5f8b0026cd80401ebc2d76cb4df170d4_blob.jpeg?width=100"-->
+                                </div>
+                                <div class="file-info">
+                                    <h3 class="bold text-multiline-truncate">#:MediaGalleryFilePost.Subject#</h3>
+                                    <p class="text-multiline-truncate-1">#:MediaGalleryFilePost.PostAuthor.UserProfile.ShortenName#</p>
+                                </div>
+                            </a>
+                        </div>
+
+                </center>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Resources" id="ca-library-files-scroller" data-stretch="true" data-layout="ca-main-layout" data-show="CommunityApp.libraryScroller.viewModel.load" data-model="CommunityApp.libraryScroller.viewModel">
+        <div id="mainImagePageScroller" data-role="scroller">
+            <div id="library-files-scrollview" class="swiper-container myphotos-container">
+                <div class="padding-8" data-bind="visible: dataBound">
+                    <h2 data-bind="html: title"></h2>
+                    <p class="fontsize-12" data-bind="text: description"></p>
+                </div>
+                <a data-bind="events: {click: closeScroller}, visible: dataBound" class="close-gallery"><span class="km-icon km-x white"></span></a>
+                <div class="swiper-wrapper margin-1" data-bind="visible: dataBound">
+                </div>
+                <div class="social" data-bind="visible: dataBound">
+                    <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize margin-3 margin-34" id="postActions">
+                        <li>
+                            <a data-bind="visible: social.UserLiked, click: unlikePost" class="no-text-decoration fontsize-14"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a>
+                            <a data-bind="invisible: social.UserLiked, click: likePost" class="no-text-decoration fontsize-14"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a>
+                        </li>
+                        <li>
+                            <a data-bind="click: comment" class="no-text-decoration fontsize-14"><span class="glyphicon glyphicon-comment margin-5"></span>Comment</a>
+                        </li>
+                        <li>
+                            <a data-bind="click: download" class="no-text-decoration fontsize-14"><span class="glyphicon glyphicon-download-alt margin-5"></span>Download</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="" data-bind="visible: showComments">
+                    <div>
+                        <ul data-role="listview" data-style="inset" id="image-comments" data-template="image-comments-tmpl" data-bind="source: comments, visible: commentsFound"></ul>
+                    </div>
+                    <form id="imageCommentForm" onsubmit="return false;">
+                        <div id="add-imageComment-form" class="form-pad">
+                            <ul id="addimageComment-listview" data-role="listview" data-style="inset">
+                                <li>
+                                    <fieldset>
+                                        <textarea id="txtImageComment" placeholder="Write a comment..." style="height: 42px;" required data-required-msg="*"></textarea>
+                                    </fieldset>
+                                </li>
+                            </ul>
+                            <button type="submit" class="padding-5 btn btn-primary bg-black width-full margin-1 margin-19"><span class="glyphicon glyphicon-plus margin-2"></span>Add Comment</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="library-folder-files-scrollview-tmpl" type="text/x-kendo-template">
+        <div class="swiper-slide">
+            <center class="margin-3">
+                <small class="breakword height-19">#= MediaGalleryFilePost.Body != null? MediaGalleryFilePost.Body : '' #</small>
+            </center>
+            <center class="margin-1">
+                #if(MediaGalleryFilePost.PostAttachments[0] && MediaGalleryFilePost.PostAttachments[0] != null){#
+                <div class="zoom-target">
+                    <div class="thumb-4">
+                        <div class="loading pos-9"></div>
+                        <img data-src="#=MediaGalleryFilePost.PostAttachments[0].FileUrl#" class="display-none" />
+                    </div>
+                </div>
+                <div class="margin-17 height-9">
+                    <span class="fontsize-13" style="white-space:pre" id="#:socialMessageId#">#:socialMessage#</span>
+                </div>
+                #}#
+            </center>
+        </div>
+    </script>
+
+    <script type="text/x-kendo-template" id="image-comments-tmpl">
+        <div class="comment-item position-relative">
+            <div class="pull-left width-92">
+                <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-thumbnail border-white" /><small class="color-black">#= Body #</small>
+            </div>
+            <div class="pull-right pos-24">
+                <a name="deleteComment" onclick="CommunityApp.post.operations({ commentSuccessCallback: CommunityApp.libraryScroller.viewModel.fnDeleteCommentCallback }).deleteComment('#:ParentId#', '#:Id#', this)" class="display-none" data-authorid="#:PostAuthor.Id#"><span class="km-icon km-x red"></span></a>
+            </div>
+            <div class="clearfix"></div>
+            <small class="pull-right fontsize-11 margin-3"> by <a href="\\#ca-user-profile?userId=#:PostAuthor.Id#">#:PostAuthor.UserProfile.FirstName# #:PostAuthor.UserProfile.LastName#</a> #:RelativeDate#</small>
+            <div class="clearfix"></div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Upload" id="ca-library-folder-add" data-layout="ca-main-layout" data-model="CommunityApp.folder.viewModel" data-show="CommunityApp.folder.viewModel.load">
+        <ul id="select-form" class="km-small width-3 margin-1 display-none" data-bind="invisible: isLibrary">
+            <li>
+                Folder
+            </li>
+            <li>
+                File
+            </li>
+        </ul>
+        <ul data-role="listview" data-style="inset" class="margin-1 container-listview display-none">
+            <li>
+                <form id="add-folder-form" onsubmit="return false;">
+                    <ul data-role="listview" data-style="inset">
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Title</span>
+                                <input type="text" placeholder="Required" class="fontsize-14" data-bind="value: title" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Title is required');" required />
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Description</span>
+                                <textarea style="resize: none" class="fontsize-14" data-bind="value: description"></textarea>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="width-full">
+                                <span class="nova-dark fontsize-14">Icon</span>
+                                <input id="iconUpload" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" required />
+                                <canvas id="folder-icon-canvas" data-bind="invisible: hideIcon" class="thumb-small margin-17"></canvas>
+                                <a data-role="button" class="pull-right fontsize-14" data-bind="click: triggerUpload"><span class="km-icon km-upload"></span>Select</a>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Allowed Extensions</span>
+                                <input type="text" class="fontsize-14" placeholder="Required" data-bind="value: allowedFileTypes" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'At least one extension is required');" required />
+                            </label>
+                        </li>
+                        <li>
+                            <i></i> <button type="submit" class="km-primary km-justified fontsize-14 btn btn-primary padding-5"><span class="km-icon km-add"></span>Add Folder</button>
+                        </li>
+                    </ul>
+                </form>
+            </li>
+        </ul>
+        <ul data-role="listview" data-style="inset" class="margin-1 container-listview">
+            <li>
+                <form id="add-file-form" onsubmit="return false;">
+                    <ul data-role="listview" data-style="inset">
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Title</span>
+                                <input type="text" placeholder="Required" class="fontsize-14" data-bind="value: title" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Title is required');" required />
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Description</span>
+                                <textarea style="resize: none" class="fontsize-14" data-bind="value: description"></textarea>
+                            </label>
+                        </li>
+                        <li>
+                            <!--ul id="select-upload" class="km-small fontsize-12">
+                                <li>
+                                    File Upload
+                                </li>
+                                <li>
+                                    Embed
+                                </li>
+                            </ul-->
+                            <label class="width-full upload-control margin-1">
+                                <span class="nova-dark">File</span>
+                                <input id="fileUpload" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" required />
+								<canvas id="file-canvas" data-bind="invisible: hideFile" class="thumb-small margin-17"></canvas>
+								<canvas id="file-canvas-upload" class="display-none" style="width:900px;"></canvas>
+                                <!--img data-bind="attr: {src: fileUrl}, invisible: hideFile" class="thumb-small margin-17" /-->
+								<p data-bind="text: previewSelectedFile, invisible:isImage" class="centerAlign margin-17"></p>
+                                <a data-role="button" class="pull-right fontsize-14" data-bind="click: triggerUploadFile"><span class="km-icon km-upload"></span>Select</a>
+                            </label>
+                            <!--label class="upload-control display-none-virtual margin-1">
+                                <span class="nova-dark fontsize-14">Embed</span>
+                                <textarea class="fontsize-14" data-bind="value: fileEmbed"></textarea>
+                            </label-->
+                        </li>
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Tags</span>
+                                <input type="text" class="fontsize-14" data-bind="value: tags" />
+                            </label>
+                        </li>
+                        <li>
+                            <i></i> <button type="submit" id="upload" class="km-primary km-justified fontsize-14 btn btn-primary padding-5"><span class="km-icon km-upload"></span>Upload File</button>
+                        </li>
+                    </ul>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div data-role="view" data-title="Search" id="ca-search" class="no-backbutton" data-layout="ca-main-layout" data-model="CommunityApp.search.viewModel" data-show="CommunityApp.search.viewModel.load">
+        <div data-role="scroller">
+            <center>
+                <input id="txtSearch" type="text" data-bind="value: query" class="width-4 margin-3 search" placeholder="Search...">
+            </center>
+            <div data-bind="invisible: searchFocus">
+                <h1 class="centerAlign margin-3">Trending Searches</h1>
+                <div id="ca-trends-listview" class="row margin-0">
+                    <ul class="container-fluid padding-0 lv-borderless"></ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="scroller">
+            <div data-bind="visible: searchFocus">
+                <h1 class="centerAlign margin-3">Results</h1>
+                
+                <div>
+                    <ul id="search-select" class="km-small width-full learning-tab search-tab">
+                        <li>
+                            All
+                        </li>
+                        <li>
+                            Discussions
+                        </li>
+                        <li>
+                            Articles
+                        </li>
+                        <li>
+                            Resources
+                        </li>
+                        <li>
+                            Learning
+                        </li>
+                    </ul>
+                </div>
+                
+                <div id="ca-search-listview0" class="row margin-0">
+                    <ul class="container-fluid serp"></ul>
+                </div>
+                <div id="ca-search-listview1" class="row margin-0">
+                    <ul class="container-fluid serp"></ul>
+                </div>
+                <div id="ca-search-listview2" class="row margin-0">
+                    <ul class="container-fluid serp"></ul>
+                </div>
+                <div id="ca-search-listview3" class="row margin-0">
+                    <ul class="container-fluid serp"></ul>
+                </div>
+                <div id="ca-search-listview4" class="row margin-0">
+                    <ul class="container-fluid serp"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="ca-trending-tmpl" type="text/x-kendo-template">
+        <li>
+            <center>
+                <a class="centerAlign no-icon color-nova no-text-decoration" href="\\#ca-search?q=#:Keyword#">#:Keyword#</a>
+            </center>
+        </li>
+    </script>
+
+    <script id="ca-serps-tmpl" type="text/x-kendo-template">
+        <li class="serp-item" data-index="#:index#">
+            #if (TypeId !== 99) {#
+            <a onclick="CommunityApp.search.viewModel.serpRedirect('#:TypeId#', '#:PostThread.ThreadSection.ApplicationType#', '#:PostThread.Type#', '#:Id#', '#:PostThread.Id#', '#:AttachmentUrl#', '#:CategoryId#', '#:CurriculumId#', '#:CourseId#', '#:AssessmentId#')"><h2>#:Subject#</h2></a>
+            <small>#= Body #</small>
+            #} else {#
+            <a onclick="CommunityApp.search.viewModel.serpRedirect('#:TypeId#', 0, 0, '#:Id#', 0, '#:AttachmentUrl#', '#:CategoryId#', '#:CurriculumId#', '#:CourseId#', '#:AssessmentId#')"><h2>#:Subject#</h2></a>
+            #}#
+            <div class="margin-3">
+                <div class="pull-left">
+                    #if (TypeId !== 99) { #
+                    <h6><span class="label label-info">#:PostThread.ThreadSection.ApplicationTypeName#</span></h6>
+                    #} else {#
+                    <h6><span class="label label-info">Learning</span></h6>
+                    #}#
+                </div>
+                <div class="pull-right">
+                #if (TypeId !== 99) { #
+                    <a href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                        <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-thumbnail km-small-thumbnail margin-11" />
+                        <small class="fontsize-11">#:PostAuthor.UserProfile.FirstName# #:PostAuthor.UserProfile.LastName#</small>
+                    </a>
+                #}#
+                    <small class="fontsize-11">#:RelativeDate#</small>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    </script>
+
+    <div data-role="view" data-title="Notifications" id="ca-notifications" class="no-backbutton" data-layout="ca-main-layout" data-show="CommunityApp.notifications.viewModel.load">
+        <div class="noti" id="notifications-listview"></div>
+    </div>
+
+    <script id="notifications-list-tmpl" type="text/x-kendo-template">
+        <div class="noti-container" data-index="#:index#">
+            <div class="#if(IsRead) {# bg-white #} else {# bg-lightblue #}#">
+                <div class="action">
+                    <a data-role="button" class="btn-swipe" data-icon="delete" onclick="CommunityApp.notifications.viewModel.deleteNotification('#:Id#', this)">Delete</a>
+                </div>
+                <div class="item #if(IsRead) {# bg-white #} else {# bg-lightblue #}#" data-id="#:Id#">
+                    <a class="black" onclick="CommunityApp.notifications.viewModel.open(this)" data-id="#:Id#" data-type="#:Type.Name#" data-attributes="#:JSON.stringify(Attributes)#">
+                        <div class="pull-left margin-2">
+                            <img class="km-small-thumbnail" src="#:ImageUrl#" />
+                        </div>
+                        <div class="pull-left content">
+                            <div>
+                                <small class="fontsize-12">#= Type.Message #</small>
+                            </div>
+                            <div class="margin-13">
+                                #if(Type.Name == "FriendRequest" || Type.Name == "ApproveFriendRequest"){#
+                                <span class="km-icon km-person fontsize-11 margin-5 pull-left"></span>
+                                #} else if(Type.Name == "PointsAwarded" || Type.Name == "PointsLost") {#
+                                <span class="km-icon km-cup fontsize-11 margin-5 pull-left"></span>
+                                #} else if(Type.Name == "BadgeAwarded") {#
+                                <span class="km-icon km-cup-big fontsize-11 margin-5 pull-left"></span>
+                                #} else if(Type.Name == "ConversationStart" || Type.Name == "ConversationReply" || Type.Name == "ForumReply" || Type.Name == "PostComment") {#
+                                <span class="km-icon km-discussion fontsize-11 margin-5 pull-left"></span>
+                                #} else if(Type.Name == "UserTag") {#
+                                <span class="km-icon km-tag fontsize-11 margin-5 pull-left"></span>
+                                #} else if(Type.Name == "LikePost") {#
+                                <span class="glyphicon glyphicon-thumbs-up margin-12 fontsize-11 margin-5 pull-left"></span>
+                                #}#
+                                <span class="fontsize-11">#:RelativeTime#</span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-kendo-template" id="header-template">
+        #: value #
+    </script>
+
+    <div data-role="view" data-title="About" class="no-backbutton" id="ca-about" data-layout="ca-main-layout" data-show="CommunityApp.about.viewModel.load" data-model="CommunityApp.about.viewModel">
+        <h1 data-bind="html: appName" class="centerAlign margin-1"></h1>
+        <ul data-role="listview" class="margin-1">
+            <li>
+                Website <a id="lnkWebsite" class="pull-right color-nova no-text-decoration" data-bind="text: website" onclick="CommunityApp.about.viewModel.gotoWebsite();"></a>
+            </li>
+            <li>
+                Version <span class="pull-right" data-bind="text: version"></span>
+            </li>
+        </ul>
+    </div>
+
+    <div data-role="view" data-title="Add Comment" id="ca-comment-add" data-layout="ca-main-layout" data-model="CommunityApp.post.viewModel" data-show="CommunityApp.post.viewModel.load">
+        <div class="row margin-0" data-bind="visible: dataBound">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                <div class="row post-container">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                        <div>
+                            <h1 data-bind="text: subject"></h1>
+                            <small data-bind="text: shortInfo" class="fontsize-11 color-gray"></small>
+                            <div class="margin-1" data-bind="html: longBody"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="margin-3">
+                            <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize" id="postActions">
+                                <li>
+                                    <a data-bind="visible: social.UserLiked, click: unlikePost" class="no-text-decoration light-blue fontsize-14"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a>
+                                    <a data-bind="invisible: social.UserLiked, click: likePost" class="no-text-decoration light-blue fontsize-14"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="margin-1 user-container-bottom">
+                            <div class="pull-left">
+                                <span class="color-gray">Written By</span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="pull-right">
+                                <div id="ratePost-bottom" class="raty"></div>
+                            </div>
+                            <a class="bold no-text-decoration pull-left margin-3" data-bind="attr: { href: authorProfileUrl }">
+                                <div class="pull-left">
+                                    <img data-bind="attr: { src: author.UserProfile.AvatarUrl }" class="thumb-round-3 border-white-2 bg-white" />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="pull-left margin-3 margin-17">
+                                    <div>
+                                        <span class="fontsize-12 bold pull-left" data-bind="text: authorFullName"></span>
+                                    </div>
+                                    <div>
+                                        <span class="fontsize-11 color-gray pull-left" data-bind="text: authorTitle"></span>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </a>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form id="commentForm" onsubmit="return false;">
+            <div id="add-comment-form" class="form-pad">
+                <ul id="addcomment-listview" data-role="listview" data-style="inset">
+                    <li>
+                        <fieldset>
+                            <legend>Write a comment!</legend>
+                            <textarea id="txtComment" style="height: 100px;" required data-required-msg="*"></textarea>
+                        </fieldset>
+                    </li>
+                </ul>
+                <button type="submit" class="padding-5 btn btn-primary bg-black width-full margin-1 margin-19"><span class="glyphicon glyphicon-plus margin-2"></span>Add Comment</button>
+            </div>
+			<div class="clearfix"></div>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Share Post" id="ca-share-post" data-layout="ca-main-layout" data-show="CommunityApp.postShare.viewModel.load" data-model="CommunityApp.postShare.viewModel">
+        <form id="shareForm" onsubmit="return false;">
+            <ul data-role="listview" data-style="inset">
+                <li>
+                    <label>
+                        <span class="nova-dark">Emails</span>
+                        <input type="text" placeholder="Comma Separated" class="width-3" data-bind="value: emails" />
+                    </label>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Post" id="ca-post" data-layout="ca-main-layout" data-model="CommunityApp.post.viewModel" data-show="CommunityApp.post.viewModel.load" data-stretch="true">
+        <div id="mainScroller" data-role="scroller">
+            <div data-bind="invisible: isStatus">
+                <div class="section-title padding-4" data-bind="visible: dataBound">
+                    <div class="title-icon">
+                        <a data-bind="attr: {href: sectionPage}"><span class="glyphicon glyphicon-menu-left color-black"></span></a>
+                    </div>
+                    <div class="title-text">
+                        <a data-bind="attr: {href: sectionPage}" class="color-black no-text-decoration"><span class="color-black" data-bind="html: sectionTitle"></span></a>
+                    </div>
+                </div>
+                <div class="section-title padding-4" data-bind="visible: isCommentPostReady">
+                    <div class="title-icon">
+                        <a data-bind="attr: {href: parentPostUrl}"><span class="glyphicon glyphicon-menu-left color-black"></span></a>
+                    </div>
+                    <div class="title-text">
+                        <a data-bind="attr: {href: parentPostUrl}" class="color-black no-text-decoration"><span class="color-black">Back to Previous Post</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-0" data-bind="visible: dataBound">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                    <div class="width-full attachment-container" data-bind="visible: attachments[0].IsImage, attr: { id: topAttachmentId }">
+                        <img id="topPostAttachment" data-bind="attr: { src: attachmentImageUrl }, invisible: loadingAttachment" class="img-responsive thumb-6" />
+                        <div data-bind="visible: loadingAttachment" class="pos-27">
+                            <center>
+                                <div class="loading"></div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="row post-container">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                            <div id="attachmentuserinfo" class="user-container" data-bind="css: { borderless: isCommentPost }">
+                                <div class="pull-left">
+                                    <a class="bold no-text-decoration" data-bind="attr: { href: authorProfileUrl }">
+                                        <div class="pull-left">
+                                            <img data-bind="attr: { src: author.UserProfile.AvatarUrl }, visible: attachments[0].IsImage" class="thumb-round-3 border-white-2 bg-white pos-5" />
+                                            <img data-bind="attr: { src: author.UserProfile.AvatarUrl }, invisible: attachments[0].IsImage" class="thumb-round-3 border-white-2 bg-white" />
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="pull-left margin-17">
+                                            <div>
+                                                <span class="fontsize-12 bold pull-left" data-bind="text: authorFullName"></span>
+                                            </div>
+                                            <div>
+                                                <span class="fontsize-11 color-gray pull-left" data-bind="text: authorTitle"></span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="margin-1 overflow-hidden">
+                                <h1 data-bind="text: subject, invisible: isCommentPost"></h1>
+                                <h1 data-bind="text: longBody, visible: isCommentPost"></h1>
+                                <small data-bind="text: shortInfo" class="fontsize-11 color-gray"></small>
+                                <div class="margin-1" data-bind="html: longBody, invisible: isCommentPost"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="margin-3 padding-4 social-container">
+                                <div class="display-table-cell-middle" style="width: 49%">
+                                    <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize" id="postActions">
+                                        <li>
+                                            <a data-bind="visible: social.UserLiked, click: unlikePost" class="no-text-decoration light-blue fontsize-14"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a>
+                                            <a data-bind="invisible: social.UserLiked, click: likePost" class="no-text-decoration light-blue fontsize-14"><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="display-table-cell-middle" style="width: 49%">
+                                    <div id="ratePost-bottom" class="raty margin-auto-center"></div>
+                                </div>
+                            </div>
+                            <div class="post-action-section clearfix">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                                    <ul id="section-threads-controls" data-role="listview" data-style="inset">
+                                        <li class="font1emBold width-full">
+                                            <div class="pull-left width-75">
+                                                Follow Post
+                                            </div>
+                                            <input id="swtFollowPost" type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isThreadFollowed" data-change="CommunityApp.post.viewModel.follow" />
+                                            <div class="clearfix"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-0">
+                                    <ul data-role="listview" data-style="inset" id="comments-actions">
+                                        <li><a data-bind="attr: { href: page('#ca-comment-add?postId=') }" class="color-nova display-inline-block width-full no-text-decoration">Add Comment<span class="km-icon km-rowinsert pull-right"></span></a><div class="clearfix"></div></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="margin-1 margin-9">
+                                <h2 data-bind="invisible: isCommentPost">Comments</h2>
+                                <h2 data-bind="visible: isCommentAndFound">Replies</h2>
+                                <ul data-role="listview" data-style="inset" id="post-comments" data-template="post-comments-tmpl" data-bind="source: comments, visible: commentsFound"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/x-kendo-template" id="post-comments-tmpl">
+        <div class="row border-3 padding-4">
+            <div class="col-xs-3 col-sm-3">
+                <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-thumbnail border-white" />
+            </div>
+            <div class="col-xs-9 col-sm-9 padding-0">
+                <div class="pull-right pos-24">
+                    <a name="deleteComment" onclick="CommunityApp.post.operations({ commentSuccessCallback: CommunityApp.post.viewModel.fnDeleteCommentCallback }).deleteComment('#:ParentId#', '#:Id#', this)" class="display-none" data-authorid="#:PostAuthor.Id#"><span class="km-icon km-x red"></span></a>
+                </div>
+                <div class="clearfix"></div>
+                <div>
+                    <small class="fontsize-11 margin-3 bold">
+                        <a href="\\#ca-user-profile?userId=#:PostAuthor.Id#" class="color-black no-text-decoration">#:PostAuthor.UserProfile.FirstName# #:PostAuthor.UserProfile.LastName#</a>
+                    </small>
+                    <small class="fontsize-10 color-gray margin-6">#:RelativeDate#</small>
+                </div>
+                <div class="width-85">
+                    <small class="fontsize-10">#= Body #</small>
+                </div>
+                <div class="pull-right margin-33">
+                    <a href="\\#ca-post?postId=#:Id#" class="color-black">
+                        <i class="glyphicon glyphicon-comment pos-45 fontsize-10"></i>&nbsp;
+                        #if(Replies == 1){#
+                        <span class="fontsize-10">1 Reply</span>
+                        #}else if(Replies > 1) {#
+                        <span class="fontsize-10">#:Replies# Replies</span>
+                        #} else { #
+                        <span class="fontsize-10">(reply)</span>
+                        #}#
+                    </a>
+                </div>
+                <div class="pull-right margin-33 pos-46">
+                    <a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.post.viewModel.likeCommentSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration fontsize-10 #if(!(SocialInfo !== null && SocialInfo.UserLiked)) {#display-none#}#"><span class="glyphicon glyphicon-thumbs-down margin-5"></span>Unlike</a>
+                    <a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.post.viewModel.likeCommentSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration fontsize-10 #if(SocialInfo !== null && SocialInfo.UserLiked) {#display-none#}#" "><span class="glyphicon glyphicon-thumbs-up margin-5"></span>Like</a>
+                    <span class="fontsize-10 #if(SocialInfo.LikesCount <= 0) {# display-none #}#">(#:SocialInfo.LikesCount#)</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </script>
+
+
+    <div data-role="view" data-title="Badges" data-stretch="true" id="ca-user-badges" data-layout="ca-main-layout" data-model="CommunityApp.badges.viewModel" data-show="CommunityApp.badges.viewModel.load">
+        <div id="badges-list-view" data-role="scrollview" data-bind="source: badges" data-template="user-badges-tmpl" data-content-height="100%"></div>
+    </div>
+
+    <script id="user-badges-tmpl" type="text/x-kendo-template">
+        <div>
+            <h2 class="km-medium-font title">#: Name #</h2>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <div class="container">
+                        <div class="image">
+                            <img data-bind="attr: {src: imagepath}" class="thumb" />
+                        </div>
+                        <p class="centerAlign breakword">#: Description #</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Favorites" id="ca-user-favorites" data-layout="ca-main-layout" data-show="CommunityApp.favorites.load">
+        <ul data-role="listview" id="user-favorites-list" data-template="user-favorites-tmpl" data-endless-scroll="true" data-auto-bind="false"></ul>
+    </div>
+
+    <script id="user-favorites-tmpl" type="text/x-kendo-template">
+        # if(ForumSubscriptionThread != null && ForumSubscriptionThread.ThreadMostRecentPost != null) {#
+
+        # if(ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor != null && ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile != null) {#
+
+        <a href="\\#ca-user-profile?userId=#:ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.Id#"><img class="thumb-round k-thumb" src="#=ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile.AvatarUrl#" /></a>
+
+        # } #
+
+        <a onclick="CommunityApp.common.navigateToAppTypeView('#:ForumSubscriptionThread.ThreadSection.ApplicationType#', '#:ForumSubscriptionThread.ThreadMostRecentPost.Id#', '#:ForumSubscriptionThread.Id#')">
+            <h2 class="margin-1">#: ForumSubscriptionThread.ThreadMostRecentPost.Subject #</h2>
+        </a>
+        <p class="margin-1">#: ForumSubscriptionThread.ThreadMostRecentPost.Body#</p>
+        <small class="pull-right">#: SubscriptionDate #</small>
+        <div class="clearfix"></div>
+        #}#
+    </script>
+
+    <div data-role="view" data-stretch="true" data-title="My Photos" id="ca-user-myphotos" data-layout="ca-main-layout" data-model="CommunityApp.myPhotos.viewModel" data-show="CommunityApp.myPhotos.viewModel.load">
+        <div id="photos-scrollview" class="swiper-container myphotos-container">
+            <a data-bind="events: {click: closeScroller}, visible: hasPhotos" class="close-gallery-2"><span class="km-icon km-x white"></span></a>
+            <div class="swiper-wrapper margin-30">
+            </div>
+        </div>
+    </div>
+
+    <script id="user-myphotos-tmpl" type="text/x-kendo-template">
+        <div class="swiper-slide">
+            <div>
+                #if(MediaGalleryFilePost.PostAttachments[0] && MediaGalleryFilePost.PostAttachments[0] != null){#
+                <img src="#= MediaGalleryFilePost.PostAttachments[0].FileUrl #" class="thumb-2" />
+                #}#
+            </div>
+            <div class="margin-3 margin-17">
+                <h3 class="breakword white">#=MediaGalleryFilePost.Subject#</h3>
+                <small class="breakword">#= MediaGalleryFilePost.Body != null? MediaGalleryFilePost.Body : '' #</small>
+            </div>
+        </div>
+    </script>
+
+    <!--My photos upload is not working until the form submission is handled upon request-->
+    <div id="ca-upload-profile-photos" data-role="view" data-layout="ca-main-layout" data-title="Upload Photo" data-show="CommunityApp.myPhotos.viewModel.loadUploadPhoto" data-model="CommunityApp.myPhotos.viewModel">
+        <ul data-role="listview" data-style="inset" class="margin-1">
+            <li>
+                <form onsubmit="return false;">
+                    <ul data-role="listview" data-style="inset">
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Title</span>
+                                <input type="text" placeholder="Required" class="fontsize-14" data-bind="value: title" required />
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <span class="nova-dark fontsize-14">Description</span>
+                                <textarea style="resize: none" class="fontsize-14" data-bind="value: description"></textarea>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="width-full">
+                                <span class="nova-dark fontsize-14">Photo</span>
+                                <input id="photoUpload" type="file" class="display-none" required />
+                                <canvas id="photo-icon-canvas" data-bind="visible: showIcon" class="thumb-small margin-17"></canvas>
+                                <a data-role="button" class="pull-right fontsize-14" data-bind="click: triggerUpload"><span class="km-icon km-upload"></span>Select</a>
+                            </label>
+                        </li>
+                        <li>
+                            <i></i> <button type="submit" class="km-primary km-justified fontsize-14 btn btn-primary padding-5" data-bind="invisible: inprogress"><span class="km-icon km-add"></span>Upload Photo</button>
+                            <a data-role="button" data-bind="visible: inprogress" class="km-primary km-justified fontsize-14">Uploading...<div class="loading pos-2 pull-right"></div></a>
+                        </li>
+                    </ul>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <script id="user-favorites-tmpl" type="text/x-kendo-template">
+        # if(ForumSubscriptionThread != null && ForumSubscriptionThread.ThreadMostRecentPost != null) {#
+
+        <div class="fav-item">
+            # if(ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor != null && ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile != null) {#
+
+            <a class="bold no-text-decoration pull-left" href="\\#ca-user-profile?userId=#:ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.Id#">
+                <div class="pull-left">
+                    <img src="#:ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile.AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile.FirstName # #: ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.UserProfile.LastName #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:ForumSubscriptionThread.ThreadMostRecentPost.PostAuthor.Title#</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+
+            # } #
+            <div class="clearfix"></div>
+            <a onclick="CommunityApp.common.navigateToAppTypeView('#:ForumSubscriptionThread.ThreadSection.ApplicationType#', '#:ForumSubscriptionThread.ThreadMostRecentPost.Id#', '#:ForumSubscriptionThread.Id#')">
+                <h2 class="fontsize-14 bold margin-3">#: ForumSubscriptionThread.ThreadMostRecentPost.Subject #</h2>
+            </a>
+            <p class="fontsize-12">#: ForumSubscriptionThread.ThreadMostRecentPost.Body#</p>
+            <small class="pull-right fontsize-11">#: RelativeDate #</small>
+            <div class="clearfix"></div>
+        </div>
+        #}#
+    </script>
+
+    <div data-role="view" data-title="Story Board" id="ca-story-board" data-layout="ca-main-layout" data-show="CommunityApp.storyBoard.load">
+        <div id="story-board-list" class="row margin-1 margin-16">
+            <div class="container-fluid padding-0 items"></div>
+        </div>
+    </div>
+
+    <script id="story-board-tmpl" type="text/x-kendo-template">
+        # if(Id > 0) {#
+        #if(typeof index != "undefined"){#
+        <div class="storyboard-item" data-index="#:index#">
+            <a class="bold no-text-decoration pull-left" href="\\#ca-user-profile?userId=#:UserId#">
+                <div class="pull-left">
+                    <img src="#:AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: Fullname #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:StoryBoardType#</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <span class="pull-right fontsize-12 color-blue-gray">#:RelativeDate#</span>
+            <div class="clearfix storyboard-separator"></div>
+            <a href='\\#ca-post?postId=#:PostId#'> #= CommunityApp.common.setContent(Subject, "<h2>{0}</h2>") #</a>
+            #= CommunityApp.common.setContent(Body, "<p class='breakword'>{0}</p>") #
+        </div>
+        #} else {#
+        <div class="storyboard-item">
+            <a class="bold no-text-decoration pull-left" href="\\#ca-user-profile?userId=#:UserId#">
+                <div class="pull-left">
+                    <img src="#:AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: Fullname #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:StoryBoardType#</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <span class="pull-right fontsize-12 color-blue-gray">#:RelativeDate#</span>
+            <div class="clearfix storyboard-separator"></div>
+            <a href='\\#ca-post?postId=#:PostId#'> #= CommunityApp.common.setContent(Subject, "<h2>{0}</h2>") #</a>
+            #= CommunityApp.common.setContent(Body, "<p>{0}</p>") #
+        </div>
+        #}#
+        #}#
+    </script>
+
+    <div data-role="view" data-title="Summary" id="ca-user-profile-details" data-layout="ca-main-layout" data-model="CommunityApp.profile.viewModel" data-show="CommunityApp.profile.viewModel.load">
+		<div class="storyboard-item" data-bind="visible: dataBound">
+			<label class="">
+                <span data-bind="text: name"></span>
+            </label>
+			<label class="km-label-above fontsize-13">
+                <span data-bind="html: bio"></span>
+            </label>
+		</div>
+    </div>
+    
+    <div id="ca-change-password" data-role="view" data-title="Change Password" data-layout="ca-main-layout" data-model="CommunityApp.changePassword.viewModel" data-show="CommunityApp.changePassword.viewModel.load">
+        <form id="change-password-form" onsubmit="return false;">
+            <ul data-role="listview" data-style="inset" style="padding: 20px 20px 0 20px">
+                <li class="padding-0">
+                    <center class="width-full">
+                        <p>Note: Password must be 6 or more characters and contain letters and numbers only.</p>
+                    </center>
+                </li>
+                <li class="margin-3">
+                    <div class="inner-addon left-addon">
+                        <input type="password" data-bind="value: newPasswd" id="txt-newPasswd" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Password is required');" placeholder="New Password" required class="width-full" />
+                    </div>
+                </li>
+                <li>
+                    <div class="inner-addon left-addon">
+                        <input type="password" data-bind="value: confirmPasswd" id="txt-confirmPasswd" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Confirm Password is required');" placeholder="Confirm Password" required class="width-full" />
+                    </div>
+                </li>
+                <li class="borderless padding-0 margin-1">
+                    <button type="submit" class="btn btn-primary width-full padding-5 bold">Save Changes</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <div id="ca-user-edit-profile" data-role="view" data-title="Edit Profile" data-layout="ca-main-layout" data-model="CommunityApp.profile.viewModel" data-show="CommunityApp.profile.viewModel.load">
+        <form id="edit-profile-form" onsubmit="return false;" data-bind="visible: dataBound">
+            <ul data-role="listview" data-style="inset" style="padding: 20px 20px 0 20px">
+                <li class="padding-0">
+                    <center class="width-full" id="profile-image-section">
+                        <input id="uploadAvatar" type="file" class="display-none" accept="image/*" />
+                        <!--<canvas id="upload-avatar" class="thumb-round display-inline margin-0"></canvas>-->
+                        <img data-bind="attr:{ src: avatarFile }" class="thumb-round display-inline margin-0" />
+                        <div class="clearfix"></div>
+                        <a data-role="button" class="fontsize-14 margin-1" data-bind="click: triggerUpload"><span class="km-icon km-upload"></span>Change Picture</a>
+                        <div class="clearfix"></div>
+                    </center>
+                </li>
+                <li class="margin-3">
+                    <div class="inner-addon left-addon">
+                        <input type="text" data-bind="value: firstName" id="txt-firstName" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'First name is required');" placeholder="First Name" required class="width-full" />
+                    </div>
+                </li>
+                <li>
+                    <div class="inner-addon left-addon">
+                        <input type="text" data-bind="value: lastName" id="txt-lastName" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Last name is required');" placeholder="Last Name" required class="width-full" />
+                    </div>
+                </li>
+                <li>
+                    <div class="inner-addon left-addon">
+                        <textarea data-bind="value: bio" id="txt-bio" placeholder="Bio" class="width-full"></textarea>
+                    </div>
+                </li>
+                <li class="borderless padding-0">
+                    <button type="submit" class="btn btn-primary width-full padding-5 bold">Save Changes</button>
+                </li>
+            </ul>
+            <div class="clearfix clearspace" style="height: 0"></div>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="User Profile" id="ca-user-profile" class="no-backbutton userprofile" data-layout="ca-main-layout" data-model="CommunityApp.profile.viewModel" data-show="CommunityApp.profile.viewModel.load">
+		
+		<div class="profile-details bg-profile padding-16" data-bind="visible:dataBound">
+			<img data-bind="attr: {src: avatar}" class="thumb-round" />
+			<div class="margin-3 centerAlign">
+				<span data-bind="text: name" class="white bold fontsize-14"></span>
+			</div>
+			<div class="padding-14 centerAlign">
+				<a data-bind="invisible:noBio, attr: { href: page('#ca-user-profile-details?userId=') }">
+					<span class="white fontsize-12" data-bind="html: shortBio"></span>
+				</a>
+			</div>
+			<div class="border-1 padding-4">
+                <center>
+                    <div class="profile-1">
+                        <span data-bind="text: totalPosts" class="white bold fontsize-14"></span>
+                        <br>
+                        <span class="white bold fontsize-14 margin-13">Posts</span>
+                    </div>
+                    <div class="profile-1 border-2" data-bind="visible: showPoints">
+                        <span data-bind="text: points" class="white bold fontsize-14"></span>
+                        <br>
+                        <span class="white bold fontsize-14 margin-13">Points</span>
+                    </div>
+                </center>
+            </div>
+		</div>
+		
+		<div data-bind="visible:dataBound" class="width-full">
+			<ul id="select-profile-view" class="km-small width-3">
+                <li id="select-storyboard">
+                    Storyboard
+                </li>
+                <li id="select-status">
+                    Status
+                </li>
+				<li id="select-badges">
+                    Badges
+                </li>
+            </ul>
+			<div data-bind="invisible: inProgress" class="width-full">
+				<div id="profile-storyboard" class="row margin-0 km-listview">
+					<div class="container-fluid padding-0"></div>
+				</div>
+				<div id="profile-status" class="row margin-0 km-listview width-full">
+					<ul data-role="listview" data-style="inset" id="profile-status-actions" data-bind="visible: isCurrentUser">
+						<li><a href="#ca-user-status-add" style="color: blue">Share Your Status</a></li>
+					</ul>
+					<ul data-role="listview" data-style="inset" class="status-list" id="profile-status-list" data-template="profile-status-tmpl" data-bind="source: statuses"></ul>
+				</div>
+				
+			</div>
+			
+		</div>
+		
+		<div id="profile-badges" class="row margin-0 km-listview">
+            <ul id="select-badges-view" class=""km-small">
+                <li id="select-badges-earned">Earned</li>
+                <li id="select-badges-available">Available</li>
+            </ul>
+            <div id="badges-earned" class="row margin-0 km-listview-badges">
+                <ul data-role="listview" data-style="inset" class="badges-list" id="profile-badges-list" data-template="profile-badges-tmpl" data-bind="source: badges"></ul>
+            </div>
+            <div id="badges-available" class="row margin-0 km-listview-badges">
+                <ul data-role="listview" data-style="inset" class="badges-list" id="profile-available-badges-list" data-template="profile-badges-tmpl" data-bind="source: availableBadges"></ul>
+            </div>
+		</div>
+        
+    </div>
+
+    <script id="story-board-tmpl" type="text/x-kendo-template">
+        # if(Id > 0) {#
+        <div class="storyboard-item" data-index="#:index#">
+            <a class="bold no-text-decoration pull-left" href="\\#ca-user-profile?userId=#:UserId#">
+                <div class="pull-left">
+                    <img src="#:AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="pull-left margin-17">
+                    <div>
+                        <span class="fontsize-12 bold pull-left">#: Fullname #</span>
+                    </div>
+                    <div>
+                        <span class="fontsize-11 color-gray pull-left">#:StoryBoardType#</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <span class="pull-right fontsize-12 color-blue-gray">#:RelativeDate#</span>
+            <div class="clearfix storyboard-separator"></div>
+            <a href='\\#ca-post?postId=#:PostId#'> #= CommunityApp.common.setContent(Subject, "<h2>{0}</h2>") #</a>
+            #= CommunityApp.common.setContent(Body, "<p class='breakword'>{0}</p>") #
+        </div>
+        #}#
+    </script>
+	
+	<script type="text/x-kendo-template" id="profile-status-tmpl">
+		<div class="status-item">
+        <small class="pull-left margin-3 margin-9 fontsize-11">#= PostDateText #</small>
+        # if(CommunityApp.base.baseData.currentUser().id == PostAuthor.Id) {#
+        <a data-role="button" data-align="right" href="\\#actionsPopOver_#:Id#" data-rel="popover" data-icon="actions-vertical" class="pull-right borderless status-actions"></a>
+        #}#
+        <a href="\\#ca-post?postId=#:Id#&mode=status" class="pull-left width-full no-text-decoration">
+        <h3>#: Body#</h3>
+        #if (PostAttachments[0] != null) {#
+        <img src="#: PostAttachments[0].FileUrl#" style="max-width: 100%">
+        #}#
+        </a>
+        <div class="clearfix"></div>
+        <div class="social-info-container margin-3 margin-9">
+            <a href="\\#ca-post?postId=#:Id#&mode=status">
+                <small class="social-info">
+                    # if (SocialInfo !== null && SocialInfo.LikesCount > 1) {#
+                    #:SocialInfo.LikesCount# Likes
+                    # } else if (SocialInfo.LikesCount == 1) { #
+                    1 Like
+                    #}#
+                </small>
+                <small class="social-info margin-6">
+                    #if(SocialInfo !== null && SocialInfo.CommentsCount > 1){#
+                    #:SocialInfo.CommentsCount# Comments
+                    # } else if(SocialInfo.CommentsCount == 1) {#
+                    1 Comment
+                    #}#
+                </small>
+            </a>
+        </div>
+        <div class="social">
+            <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize" id="statusActions">
+                # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart-empty margin-5"></span>Unlike</a></li>
+                #} else {#
+                <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart margin-5"></span>Like</a></li>
+                #}#
+                <li><a href="\\#ca-comment-add?postId=#:Id#&mode=status" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5"></span>Comment</a></li>
+            </ul>
+        </div>
+        # if(CommunityApp.base.baseData.currentUser().id == PostAuthor.Id) {#
+        <div id="actionsPopOver_#:Id#" data-role="popover" data-popup='{ "width": "100%" }' data-pane="{'transition':'slide'}">
+            <div data-role="view" class="display-inline">
+                <ul id="status-actions-list" data-role="listview">
+                    #if (PostAttachments[0] != null) {#
+                    <li><a onclick="CommunityApp.status.viewModel.goToStatusUpdate('#:Id#', '#:Body#', '#:PostAttachments[0].FileUrl#', this)" class="no-text-decoration dark-blue" data-target="_top"><span class="km-icon km-compose margin-5"></span>Update</a></li>
+                    #} else {#
+                    <li><a onclick="CommunityApp.status.viewModel.goToStatusUpdate('#:Id#', '#:Body#', null, this)" class="no-text-decoration dark-blue" data-target="_top"><span class="km-icon km-compose margin-5"></span>Update</a></li>
+                    #}#
+                    <li><a onclick="CommunityApp.post.operations({ deletePostSuccessCallback: CommunityApp.profile.viewModel.fnDeleteStatusCallback }).deletePost('#:Id#', this)" class="no-text-decoration red" data-target="_top"><span class="km-icon km-trash margin-5"></span>Delete</a></li>
+                </ul>
+            </div>
+        </div>
+        #}#
+		</div>
+    </script>
+	
+	<script id="profile-badges-tmpl" type="text/x-kendo-template">
+        <div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="display: table-cell; vertical-align: middle; float: none;"><img src="#: imagepath #" class="thumb-6" /></div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="display: table-cell; vertical-align: middle; float: none; border-left: solid 2px black;"><h4 class="km-bold-font">#: Name #</h4></div>
+            <div class="clearfix"></div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Section Posts" id="ca-section-posts" class="no-backbutton" data-layout="ca-main-layout" data-model="CommunityApp.sectionPosts.viewModel"
+         data-show="CommunityApp.sectionPosts.viewModel.load" data-stretch="true">
+        <div data-role="content" class="padding-5">
+            <h2 class="padding-4 display-block font1emBold pull-left margin-0" data-bind="html: heading"></h2>
+            <ul data-role="listview" data-style="inset">
+                <li class="padding-4 font1emBold pull-right">
+                    Follow <input id="swtFollow" type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isFollowed" data-change="CommunityApp.sectionPosts.viewModel.follow" />
+                </li>
+            </ul>
+        </div>
+        <div data-role="scroller" class="height-1" id="section-posts-scroller">
+            <div id="section-recent-posts-list" class="row margin-0">
+                <div class="container-fluid padding-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Discussions" id="ca-section-threads" data-layout="ca-main-layout" data-model="CommunityApp.sectionThreads.viewModel"
+         data-show="CommunityApp.sectionThreads.viewModel.load" data-stretch="true">
+        <div data-role="content">
+            <h2 class="padding-4 centerAlign display-block sub-header height-20" data-bind="html: heading, visible: dataBound"></h2>
+        </div>
+        <div data-role="scroller" class="height-1" id="sectionThreadScroller">
+            <div data-bind="visible: dataBound">
+                <ul data-role="listview" data-style="inset" id="section-threads-controls">
+                    <li class="pull-left font1emBold">
+                        Follow <input id="swtFollow" type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isFollowed" data-change="CommunityApp.sectionThreads.viewModel.follow" />
+                    </li>
+                    <li class="pull-right font1emBold">
+                        View Unread <input id="swtFilterUnread" type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isUnread" data-change="CommunityApp.sectionThreads.viewModel.filterUnread" />
+                    </li>
+                </ul>
+                <ul id="thread-select-sortType" class="km-small width-4">
+                    <li id="thread-select-newest">
+                        Newest
+                    </li>
+                    <li id="thread-select-oldest">
+                        Oldest
+                    </li>
+                    <li id="thread-select-oldest">
+                        Popular
+                    </li>
+                </ul>
+                <div id="section-threads-list" class="row margin-0 km-listview threadfix">
+                    <div class="container-fluid padding-0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="threads-list-tmpl" type="text/x-kendo-template">
+        # if(ThreadMostRecentPost && ThreadMostRecentPost != null && ThreadMostRecentPost.Id > 0) {#
+        <div class="section-thread-item-container">
+            <div class="height-18 padding-3 section-thread-item margin-3" data-index="#:index#">
+                <a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:ThreadMostRecentPost.PostAuthor.Id#">
+                    <div class="pull-left">
+                        <img src="#:ThreadMostRecentPost.PostAuthor.UserProfile.AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-left margin-17">
+                        <div>
+                            <span class="fontsize-12 bold pull-left">#: ThreadMostRecentPost.PostAuthor.UserProfile.FirstName + " " + ThreadMostRecentPost.PostAuthor.UserProfile.LastName #</span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left">#:ThreadMostRecentPost.PostAuthor.UserProfile.Title#</span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left">#:RelativeDate#</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-right">
+                        #if(IsReadByCurrentUser){#
+                        <span class="km-icon km-envelope-open"></span>
+                        #}else{#
+                        <span class="km-icon km-envelope-close"></span>
+                        #}#
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+                <div class="clearfix"></div>
+                <a onclick="CommunityApp.sectionThreads.viewModel.page('#:Id#', '#:Type#')">
+                    <h2 class="font1emBold">#= Subject #</h2>
+                    <div class="display-inline-block breakword width-full">
+                        <p class="height-17">#= ThreadMostRecentPost.Body #</p>
+                    </div>
+                </a>
+            </div>
+            <div class="info4 margin-1">
+                #if(TotalReplies != 1){#
+                <small class="pull-left fontsize-11 capitalize">#:TotalReplies# replies</small>
+                #}else{#
+                <small class="pull-left fontsize-11 capitalize">1 reply</small>
+                #}#
+                <small class="pull-right fontsize-11 capitalize">#:Type#</small>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        #}#
+    </script>
+
+    <div data-role="view" data-title="Section" id="ca-section" data-layout="ca-main-layout" data-model="CommunityApp.section.viewModel" data-show="CommunityApp.section.viewModel.load">
+        <h2 data-bind="html: name" class="pull-left margin-1"></h2>
+        <a data-role="button" href="#actionsPopOver" data-rel="popover" data-icon="actions-vertical" class="pull-right borderless margin-3"></a>
+        <div class="clearfix"></div>
+        <div class="padding-3">
+            <p data-bind="text: description" class="breakword"></p>
+        </div>
+
+        <ul class="list-style-none padding-3 margin-1">
+            <li>
+                <i></i> <a id="btnThreads" data-bind="click: goToSectionThreadsView, invisible: isPost" data-role="button" data-animated="true" class="km-justified display-none-virtual" data-icon="organize">Threads</a>
+            </li>
+            <li class="margin-3">
+                <i></i> <a id="btnPosts" data-bind="click: goToSectionPostsView, visible: isPost" data-role="button" data-animated="true" class="km-justified display-none-virtual" data-icon="mostviewed">Posts</a>
+            </li>
+        </ul>
+
+        <ul data-role="listview" data-style="inset">
+            <li>
+                <label class="km-label-above">
+                    <span data-bind="text: applicationTypeName"></span> published on <span data-bind="text: dateCreated"></span>
+                </label>
+            </li>
+            <li>
+                Follow <input id="swtFollow" type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isFollowed" data-change="CommunityApp.section.viewModel.follow" />
+            </li>
+        </ul>
+
+        <div id="actionsPopOver" data-role="popover">
+            <div data-role="view" data-model="CommunityApp.section.viewModel">
+                <ul data-role="listview">
+                    <li><a data-bind="attr:{ href: page('ca-section-posts?sectionId=') }" data-target="_top">Posts</a></li>
+                    <li><a data-bind="attr:{ href: page('views/section/section-tags.html?sectionId=') }" data-target="_top">Tags</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Add Status" id="ca-user-status-add" data-layout="ca-main-layout" data-model="CommunityApp.status.viewModel" data-show="CommunityApp.status.viewModel.loadAddStatus">
+        <div id="add-status-form">
+            <ul data-role="listview" data-style="inset">
+                <li>
+                    <fieldset>
+                        <legend>What's on your mind?</legend>
+                        <textarea style="height: 100px;" data-bind="value: body" required data-required-msg="*"></textarea>
+                    </fieldset>
+                </li>
+                <li>
+                    <label class="width-full">
+                        <span class="nova-dark fontsize-14">Attachment</span>
+                        <input id="attchUploadStatus" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" accept="image/*" />
+                        <canvas id="status-attachment-canvas-new" data-bind="invisible: forGiphy" class="thumb-small margin-17"></canvas>
+                        <canvas id="status-attachment-canvas-new-upload" class="display-none" style="width:623px;"></canvas>
+                        <img data-bind="attr: {src: selectedFixedWidthGiphy}, visible: forGiphy" class="thumb-small margin-17">
+                        <a data-role="button" class="pull-right fontsize-14 pos-1" data-bind="click: selectResource"><span class="km-icon km-upload"></span>Select</a>
+                    </label>
+                </li>
+            </ul>
+            <a data-role="button" data-bind="click: add" class="km-primary km-justified margin-1"><span class="glyphicon glyphicon-plus margin-2"></span>Add Status</a>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Status Update" id="ca-user-status-update" data-layout="ca-main-layout" data-model="CommunityApp.status.viewModel"
+         data-show="CommunityApp.status.viewModel.loadStatusToUpdate">
+        <div id="update-status-form">
+            <ul data-role="listview" data-style="inset">
+                <li>
+                    <fieldset>
+                        <legend>Update your status</legend>
+                        <textarea style="height: 100px;" data-bind="value: body" required data-required-msg="*"></textarea>
+                    </fieldset>
+                </li>
+                <li>
+                    <label class="width-full">
+                        <span class="nova-dark fontsize-14">Attachment</span>
+                        <input id="attchUploadStatusUpdate" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" accept="image/*" />
+                        <canvas id="status-attachment-canvas-update" data-bind="invisible: forGiphy" class="thumb-small margin-17"></canvas>
+                        <canvas id="status-attachment-canvas-update-upload" class="display-none" style="width:623px;"></canvas>
+                        <img data-bind="attr: {src: selectedFixedWidthGiphy}, visible: forGiphy" class="thumb-small margin-17">
+                        <a data-role="button" class="pull-right fontsize-14 pos-1" data-bind="click: selectResourceForUpdate"><span class="km-icon km-upload"></span>Select</a>
+                    </label>
+                </li>
+            </ul>
+            <a data-role="button" data-bind="click: update" class="km-primary km-justified margin-1"><span class="km-icon km-compose margin-2"></span>Update</a>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Status" id="ca-user-status" data-layout="ca-main-layout" data-model="CommunityApp.status.viewModel" data-show="CommunityApp.status.viewModel.load"
+         data-stretch="true">
+        <div data-role="scroller" id="listScroller">
+            <ul data-role="listview" data-style="inset" class="status-list" id="user-status-list" data-template="user-status-tmpl" data-bind="source: statuses"></ul>
+        </div>
+
+        <div data-role="content">
+            <ul data-role="listview" data-style="inset" id="user-status-actions" data-bind="visible: isCurrentUser">
+                <li><a href="#ca-user-status-add">Add Status</a><a data-role="detailbutton" data-style="rowinsert"></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/x-kendo-template" id="user-status-tmpl">
+		<div class="status-item">
+        <small class="pull-right margin-3 margin-9 fontsize-11">#= PostDateText #</small>
+        # if(CommunityApp.status.viewModel.isCurrentUser()) {#
+        <a data-role="button" data-align="right" href="\\#actionsPopOver_#:Id#" data-rel="popover" data-icon="actions-vertical" class="pull-right borderless status-actions"></a>
+        #}#
+        <a href="\\#ca-post?postId=#:Id#&mode=status" class="pull-left width-full no-text-decoration">
+        <h3>#: Body#</h3>
+        #if (PostAttachments[0] != null) {#
+        <img src="#: PostAttachments[0].FileUrl#" style="max-width: 100%">
+        #}#
+        </a>
+        <div class="clearfix"></div>
+        <div class="social-info-container">
+            <a href="\\#ca-post?postId=#:Id#&mode=status">
+                <small class="social-info">
+                    # if (SocialInfo !== null && SocialInfo.LikesCount > 1) {#
+                    #:SocialInfo.LikesCount# Likes
+                    # } else if (SocialInfo.LikesCount == 1) { #
+                    1 Like
+                    #}#
+                </small>
+                <small class="social-info margin-6">
+                    #if(SocialInfo !== null && SocialInfo.CommentsCount > 1){#
+                    #:SocialInfo.CommentsCount# Comments
+                    # } else if(SocialInfo.CommentsCount == 1) {#
+                    1 Comment
+                    #}#
+                </small>
+            </a>
+        </div>
+        <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize" id="statusActions">
+            # if(SocialInfo !== null && SocialInfo.UserLiked) {#
+            <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart-empty margin-5"></span>Unlike</a></li>
+            #} else {#
+            <li><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.status.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart margin-5"></span>Like</a></li>
+            #}#
+            <li><a href="\\#ca-comment-add?postId=#:Id#&mode=status" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5"></span>Comment</a></li>
+        </ul>
+        # if(CommunityApp.status.viewModel.isCurrentUser()) {#
+        <div id="actionsPopOver_#:Id#" data-role="popover" data-popup='{ "width": "100%" }' data-pane="{'transition':'slide'}">
+            <div data-role="view" class="display-inline">
+                <ul id="status-actions-list" data-role="listview">
+                    <li><a onclick="CommunityApp.status.viewModel.goToStatusUpdate('#:Id#', '#:Body#', this)" class="no-text-decoration dark-blue" data-target="_top"><span class="km-icon km-compose margin-5"></span>Update</a></li>
+                    <li><a onclick="CommunityApp.post.operations({ deletePostSuccessCallback: CommunityApp.status.viewModel.fnDeleteStatusCallback }).deletePost('#:Id#', this)" class="no-text-decoration red" data-target="_top"><span class="km-icon km-trash margin-5"></span>Delete</a></li>
+                </ul>
+            </div>
+        </div>
+        #}#
+		</div>
+    </script>
+
+    <div data-role="view" data-title="Your Progress" id="ca-learning-progress" data-layout="ca-main-layout" data-show="CommunityApp.learningScore.viewModel.load" data-model="CommunityApp.learningScore.viewModel">
+
+        <div data-role="scroller" class="margin-30">
+            <h1 class="margin-1">Required Learning</h1>
+            <div class="position-relative height-10">
+                <div class="progress width-4 margin-1 center-absolute">
+                    <div class="progress-bar" role="progressbar" data-bind="attr: { aria-valuenow: requiredScore }, style: {width: requiredPercentage}, text: requiredPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+
+            <!--<h1 class="margin-1">Optional Learning</h1>
+            <div class="position-relative height-10">
+                <div class="progress width-4 margin-1 center-absolute">
+                    <div class="progress-bar" role="progressbar" data-bind="attr: { aria-valuenow: optionalScore }, style: {width: optionalPercentage}, text: optionalPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Discussions" class="no-backbutton" id="ca-discussions" data-layout="ca-main-layout" data-show="CommunityApp.forums.viewModel.load" data-model="CommunityApp.forums.viewModel">
+        <ul id="select-discussion" class="km-small width-3 margin-1 display-none-virtual">
+            <li>
+                Recent
+            </li>
+            <li>
+                Popular
+            </li>
+            <li>
+                All Topics
+            </li>
+        </ul>
+        <div id="recent-discussions" class="row margin-16 forums" data-bind="visible: recentDataBound">
+            <div class="container-fluid padding-0 items"></div>
+        </div>
+        <div id="popular-discussions" class="row margin-1 margin-16 forums" data-bind="visible: popularDataBound">
+            <div class="container-fluid padding-0 items"></div>
+        </div>
+        <div id="all-topics" class="row margin-1 margin-16 forums" data-bind="visible: allTopicsDataBound">
+            <div class="container-fluid padding-0 items"></div>
+        </div>
+    </div>
+
+    <script type="text/x-kendo-template" id="forum-list-less-tmpl">
+        <div class="recent-thread-container">
+            <div class="#:discussion_type#" data-index="#:index#">
+                <span class="ribbon"><a href="\\#ca-section-threads?sectionId=#:SectionId#" class="white bold no-text-decoration">#= SectionName # <span class="glyphicon glyphicon-chevron-right"></span></a></span>
+                #if(IsReadByCurrentUser){#
+                <span class="pull-right km-icon km-envelope-open"></span>
+                #}else{#
+                <span class="pull-right km-icon km-envelope-close"></span>
+                #}#
+                <div class="clearfix"></div>
+                <div class="pull-left info2 margin-3">
+                    <div class="user-container padding-11">
+                        <a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:AuthorId#">
+                            <div class="pull-left">
+                                <img src="#:AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="pull-left margin-17">
+                                <div>
+                                    <span class="fontsize-12 bold pull-left">#: FullName #</span>
+                                </div>
+                                #if(Title != null){#
+                                <div>
+                                    <span class="fontsize-11 color-gray pull-left">#:Title#</span>
+                                </div>
+                                #}#
+                                <div>
+                                    <span class="fontsize-11 color-gray pull-left">#:RelativeDate#</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="margin-24 display-block">
+                        <h3 class="margin-23">
+                            #if (ThreadType == "Discussion") {#
+                            <a href="\\#ca-thread-discussion?threadId=#:ThreadId#">#=Subject#</a>
+                            #} else {#
+                            <a href="\\#ca-thread-qa?threadId=#:ThreadId#">#=Subject#</a>
+                            #}#
+                        </h3>
+                        <div class="display-inline-block breakword width-full">
+                            <small>#=Body#</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="pull-right">
+                    <small class="fontsize-11 social-small display-inline-block">
+                        <span class="km-icon km-comment margin-5 display-inline-block"></span><span>#:Replies#</span>
+                    </small>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-kendo-template" id="forum-list-tmpl">
+        <div class="recent-thread-container">
+            <div class="#:discussion_type#" data-index="#:index#">
+                <span class="ribbon"><a href="\\#ca-section-threads?sectionId=#:SectionId#" class="white bold no-text-decoration">#= PostSection.Name # <span class="glyphicon glyphicon-chevron-right"></span></a></span>
+                #if(PostThread.IsReadByCurrentUser){#
+                <span class="pull-right km-icon km-envelope-open"></span>
+                #}else{#
+                <span class="pull-right km-icon km-envelope-close"></span>
+                #}#
+                <div class="clearfix"></div>
+                <div class="pull-left info2 margin-3">
+                    <div class="user-container padding-11">
+                        <a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                            <div class="pull-left">
+                                <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-medium-thumbnail margin-17" />
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="pull-left margin-17">
+                                <div>
+                                    <span class="fontsize-12 bold pull-left">#: PostAuthor.UserProfile.FirstName + " " + PostAuthor.UserProfile.LastName #</span>
+                                </div>
+                                <div>
+                                    <span class="fontsize-11 color-gray pull-left">#:PostAuthor.UserProfile.Title#</span>
+                                </div>
+                                <div>
+                                    <span class="fontsize-11 color-gray pull-left">#:RelativeDate#</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="margin-24 display-block">
+                        <h3 class="margin-23">
+                            #if (PostThread.Type == "Discussion") {#
+                            <a href="\\#ca-thread-discussion?threadId=#:ThreadId#">#=Subject#</a>
+                            #} else {#
+                            <a href="\\#ca-thread-qa?threadId=#:ThreadId#">#=Subject#</a>
+                            #}#
+                        </h3>
+                        <div class="display-inline-block breakword width-full">
+                            <small>#=Body#</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="pull-right">
+                    <small class="fontsize-11 social-small display-inline-block">
+                        <span class="km-icon km-comment margin-5 display-inline-block"></span><span>#:Replies#</span>
+                    </small>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </script>
+
+    <script id="type-sections-list-tmpl" type="text/x-kendo-template">
+        <a href="\\#ca-section-threads?sectionId=#:Id#" class="all-topics-section" data-index="#:index#">
+            <h3>#=Name#</h3>
+            <div class="info3">
+                #if(TotalThreads > 0) {#
+                <small class="pull-left fontsize-11">#:RelativeDateCreated#</small>
+                #}#
+                <small class="pull-right fontsize-11">#:TotalThreads# Threads</small>
+                <div class="clearfix"></div>
+            </div>
+        </a>
+    </script>
+
+    <div data-role="view" data-title="Sections" id="ca-group-sections" data-layout="ca-main-layout" data-show="CommunityApp.groupSections.viewModel.load" data-hide="CommunityApp.groupSections.viewModel.hide">
+        <div id="group-sections-listview" class="row margin-0" data-bind="visible: dataBound">
+            <div class="container-fluid padding-0"></div>
+        </div>
+    </div>
+
+    <script id="group-sections-list-tmpl" type="text/x-kendo-template">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="group-item" data-index="#:index#">
+                <a href="\\#ca-section-threads?sectionId=#:Id#">
+                    #if(UnreadThreads > 0){#
+                    <div class="pull-right pos-28">
+                        <span class="fontsize-11"><i class="km-icon km-envelope-close display-inline-block"></i>&nbsp;#:UnreadThreads#</span>
+                    </div>
+                    #}#
+                    <div class="clearfix"></div>
+                    <h2 class="font1emBold">#=Name#</h2>
+                    <div class="info3">
+                        #if(RelativeMostRecentPostDate != null) {#
+                        <small class="pull-left fontsize-11 capitalize">#:RelativeMostRecentPostDate#</small>
+                        #}#
+                        #if(TotalThreads != 1){#
+                        <small class="pull-right fontsize-11 capitalize">#:TotalThreads# Threads</small>
+                        #}else {#
+                        <small class="pull-right fontsize-11 capitalize">1 Thread</small>
+                        #}#
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="All Topics" id="ca-groups" class="no-backbutton" data-layout="ca-main-layout" data-show="CommunityApp.groups.viewModel.load">
+        <ul data-role="listview" id="groups-listview" data-template="groups-list-tmpl" data-auto-bind="false" data-endless-scroll="true"></ul>
+    </div>
+
+    <script id="groups-list-tmpl" type="text/x-kendo-template">
+        <a href="\\#ca-group-sections?groupId=#:Id#">
+            <h2>#=Name#</h2>
+        </a>
+    </script>
+
+    <div data-role="view" data-title="Reply" id="ca-thread-post-reply" data-layout="ca-main-layout" data-model="CommunityApp.threadPosts.viewModel" data-show="CommunityApp.threadPosts.viewModel.loadReply">
+        <div data-bind="visible: dataBound">
+            <article class="feed-article" data-bind="invisible: typing">
+                <a class="bold no-text-decoration" data-bind="attr: { href: profilePage('#ca-user-profile?userId=') }">
+                    <div class="pull-left">
+                        <img data-bind="attr: {src: author.UserProfile.AvatarUrl }" class="km-medium-thumbnail margin-17" />
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-left margin-17">
+                        <div>
+                            <span class="fontsize-12 bold pull-left" data-bind="text: author.UserProfile.FullName"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: author.UserProfile.Title"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: relativeDate"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+                <div class="margin-1 margin-17">
+                    <h2 data-bind="text: subject"></h2>
+                    <p data-bind="html: longBody"></p>
+                </div>
+                <div class="margin-1 margin-17" data-bind="visible: hasImageAttachment">
+                    <img data-bind="attr: { src: attachmentUrl }" class="img-responsive" />
+                </div>
+                <div class="margin-1 margin-17" data-bind="visible: hasNonImageAttachment">
+                    <a data-bind="attr: {href: attachmentUrl}" class="no-text-decoration">View Attachment</a>
+                </div>
+                <div class="margin-17 margin-3 height-9">
+                    <span class="fontsize-14 color-blue-gray" data-bind="text: replySocialMessage"></span>
+                </div>
+            </article>
+            <form id="reply-form" onsubmit="return false;">
+                <ul data-role="listview" data-style="inset">
+                    <li>
+                        <fieldset>
+                            <legend>Reply</legend>
+                            <textarea id="txtPostReply" style="height: 100px;" data-bind="value: body" required data-required-msg="*"></textarea>
+                        </fieldset>
+                    </li>
+                    <li>
+                        <label class="width-full">
+                            <span class="nova-dark fontsize-14 pull-left">Attachment</span>
+                            <input id="attchUpload" type="file" class="display-none" />
+                            <canvas id="discussion-attachment-canvas" data-bind="invisible: forGiphy" class="thumb-small margin-17"></canvas>
+							<canvas id="discussion-attachment-canvas-reply-upload" class="display-none" style="width:623px;"></canvas>
+							<img data-bind="attr: {src: selectedFixedWidthGiphy}, visible: forGiphy" class="thumb-small margin-17">
+                            <a data-role="button" class="pull-right fontsize-14" data-bind="click: selectResource"><span class="km-icon km-upload"></span>Select</a>
+                            <div class="clearfix"></div>
+                        </label>
+                    </li>
+                    <li>
+                        <button type="submit" class="btn btn-primary width-full padding-5 bold"><span class="km-icon km-comment"></span>Reply</button>
+                    </li>
+                </ul>
+				<div class="clearfix clearspace" style="height: 300px;"></div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Upload Extra File" id="ca-thread-post-extra" data-layout="ca-main-layout" data-show="CommunityApp.extraFile.viewModel.load" data-model="CommunityApp.extraFile.viewModel">
+        <form id="extra-file-form" onsubmit="return false;">
+            <ul data-role="listview" data-style="inset">
+                <li>
+                    <label class="width-full">
+                        <span class="nova-dark fontsize-14 pull-left">File</span>
+                        <input id="attchExtraUpload" type="file" class="visibility-hidden" />
+                        <canvas id="discussion-extra-attachment-canvas-newthread" data-bind="invisible: hideIcon" class="thumb-small margin-17"></canvas>
+                        <canvas id="discussion-extra-attachment-canvas-new-upload" class="display-none" style="width:623px;"></canvas>
+                        <a data-role="button" class="pull-right fontsize-14" onclick="CommunityApp.extraFile.viewModel.triggerUpload();"><span class="km-icon km-upload"></span>Select</a>
+                        <div class="clearfix"></div>
+                    </label>
+                </li>
+                <li>
+                    <button type="submit" class="btn btn-primary width-full"><i class="glyphicon glyphicon-file"></i>&nbsp;Attach File</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <div data-role="view" data-title="Discussion" id="ca-thread-discussion" class="no-backbutton" data-layout="ca-main-layout" data-show="CommunityApp.threadPosts.viewModel.load" data-model="CommunityApp.threadPosts.viewModel">
+        <div class="section-title padding-4" data-bind="visible: dataBound">
+			<div class="title-icon">
+				<a data-bind="attr: {href: sectionPage('#ca-section-threads?sectionId=')}"><span class="glyphicon glyphicon-menu-left"></span></a>
+			</div>
+			<div class="title-text">	
+				<span data-bind="html: sectionTitle()"></span>
+			</div>
+        </div>
+        <ul data-role="listview" id="section-threads-controls">
+            <li class="font1emBold width-full">
+                <div class="pull-left width-75">Stop notifications for <span data-bind="text: topPost.Subject"></span> </div>
+                <input type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isMuted" data-change="CommunityApp.threadPosts.viewModel.mute" />
+                <div class="clearfix"></div>
+            </li>
+        </ul>
+        <div id="thread-discussions-main-container" class="main-container" data-bind="visible: dataBound">
+            <ul id="select-sortType" class="km-small width-4">
+                <li id="select-newest">
+                    Newest
+                </li>
+                <li id="select-oldest">
+                    Oldest
+                </li>
+            </ul>
+			<article data-bind="visible: hasPoll" class="feed-article">
+				<div data-bind="visible: dataBound">
+					<h2 data-bind="html: pollDescription" class="centerAlign"></h2>
+				</div>
+				<center data-bind="visible: dataBound">
+					<small data-bind="text: pollAnsweredUserCountText"></small>
+				</center>
+				<div id="discussion-poll-items-list" data-bind="visible: unansweredPoll" class="padding-17 margin-1">
+					<form id="discussion-poll-vote-form" onsubmit="return false;">
+						<ul class="poll-item-fieldlist">
+						</ul>
+						<button type="submit" class="btn btn-primary width-full padding-5 bold">Vote</button>
+					</form>
+				</div>
+				<div data-bind="invisible: unansweredPoll">
+					<div id="discussion-poll-chart" data-bind="visible: showChart" class="poll-chart">
+					</div>
+					<div id="discussion-poll-legend" data-bind="visible: showChart" class="centerAlign">
+						<ul class="poll-legend">
+						</ul>
+					</div>
+				</div>
+			</article>
+            <article class="feed-article">
+                <a class="bold no-text-decoration" data-bind="attr: { href: profilePage('#ca-user-profile?userId=') }">
+                    <div class="pull-left">
+                        <img data-bind="attr: {src: topPost.PostAuthor.UserProfile.AvatarUrl }" class="km-medium-thumbnail margin-17" />
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-left margin-17">
+                        <div>
+                            <span class="fontsize-12 bold pull-left" data-bind="text: topPost.PostAuthor.UserProfile.FullName"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: topPost.PostAuthor.UserProfile.Title"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: topPost.RelativeDate"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-right" data-bind="visible: editAllowed">
+                        <a id="btn-edit-discussion" data-align="right" class="pull-right" style="display: block;border-style: none" data-bind="attr: { href: editThreadPage('#ca-thread-edit?postId=') }"><span class="km-icon km-compose"></span></a>
+                        <a id="btn-delete-discussion" data-align="right" class="pull-right margin-16" style="display: block;border-style: none" data-bind="events: {click: deleteTopForumPost}"><span class="km-icon km-delete"></span></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+                <div data-bind="attr: { id: topAttachmentId }">
+                    <div class="margin-1 margin-17" data-bind="visible: hasImageAttachment">
+                        <button data-role="button" class="delete-attachment-btn pull-right km-icon km-x" data-param="0_o" data-bind="visible: editAllowed" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+                        <img data-bind="attr: { src: attachmentUrl }" class="img-responsive img-attachment" />
+                    </div>
+                    <div class="margin-1 margin-17" data-bind="visible: hasNonImageAttachment">
+                        <button data-role="button" class="delete-attachment-btn pull-right km-icon km-x" data-param="0_o" data-bind="visible: editAllowed" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+                        <a onclick="CommunityApp.threadPosts.viewModel.redirectNoImageAttachmentOfTopPost()" class="no-text-decoration">View Attachment</a>
+                    </div>
+                </div>
+                <div class="margin-1 margin-17 overflow-hidden">
+                    <h2 class="font1emBold" data-bind="text: topPost.Subject"></h2>
+                    <p data-bind="html: topPost.Body"></p>
+                </div>
+                <div class="margin-1 margin-17" data-bind="visible: hasExtraAttachmentUrl">
+                    <div class="margin-1 margin-17" data-bind="visible: isExtraImageAttachment">
+                        <button data-role="button" class="delete-attachment-btn pull-right km-icon km-x" data-param="0_e" data-bind="visible: editAllowed" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+                        <img data-bind="attr: { src: extraAttachmentUrl }" class="img-responsive img-attachment" />
+                    </div>
+                    <div class="margin-1 margin-17" data-bind="invisible: isExtraImageAttachment">
+                        <button data-role="button" class="delete-attachment-btn pull-right km-icon km-x" data-param="0_e" data-bind="visible: editAllowed" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+                        <a onclick="CommunityApp.threadPosts.viewModel.redirectNoImageAttachmentOfTopPost()" class="no-text-decoration">View Attachment</a>
+                    </div>
+                </div>
+                <div class="margin-17 margin-3">
+                    <span class="fontsize-14 color-blue-gray" data-bind="text: socialMessage"></span>
+                </div>
+                <div class="social">
+                    <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize padding-0 margin-3" id="statusActions">
+                        <li class="centerAlign social" data-bind="visible: topPost.SocialInfo.UserLiked"><a data-bind="attr: { data-id: topPost.Id }, events: { click: unlikePost }" class="no-text-decoration btn-comment"><span class="km-icon km-heart-empty margin-5 display-inline-block"></span>Unlike</a></li>
+                        <li class="centerAlign social" data-bind="invisible: topPost.SocialInfo.UserLiked"><a data-bind="attr: { data-id: topPost.Id }, events: { click: likePost }" class="no-text-decoration btn-comment"><span class="km-icon km-heart margin-5 display-inline-block"></span>Like</a></li>
+                        <li class="centerAlign" data-bind="invisible: topPost.IsLocked"><a data-bind="attr: { href: replyPage('#ca-thread-post-reply') }" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5 display-inline-block"></span>Reply</a></li>
+                        <li class="centerAlign" data-bind="visible: hasImageAttachment, attr: {id: topAttachmentDownload}"><a data-bind="attr: { data-image: attachmentUrl }" class="no-text-decoration btn-comment" onclick = "CommunityApp.threadPosts.viewModel.download(this);"><span class="km-icon km-download margin-5 display-inline-block"></span>Download</a></li>
+                    </ul>
+                </div>
+            </article>
+            <h2 class="margin-1 margin-26">Replies</h2>
+            <div data-bind="invisible: hasReplies">
+                <h3 class="centerAlign margin-1">Be the first to reply to this thread</h3>
+            </div>
+            <div id="thread-discussions" class="row margin-1 margin-16" data-bind="visible: hasReplies">
+                <div class="container-fluid padding-0 items"></div>
+            </div>
+        </div>
+    </div>
+
+    <script id="thread-discussions-tmpl" type="text/x-kendo-template">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="replyContainer#:Id#">
+            <div class="discussion-item breakword" data-index="#:index#">
+                <div class="line-height-1 margin-1">
+                    <a href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                        <div class="pull-left">
+                            <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-thumbnail" />
+                        </div>
+                        <div class="pull-left margin-17">
+                            <div>
+                                <a class="fontsize-11 color-nova" href="\\#ca-user-profile?userId=#:PostAuthor.Id#">#:PostAuthor.UserProfile.FirstName# #:PostAuthor.UserProfile.LastName#</a>
+                            </div>
+                            <div>
+                                <span class="fontsize-11">#:RelativeDate#</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="pull-right #if(!allowedEdit) {#display-none#}#">
+                        <a id="btn-edit-discussion-reply" class="pull-right" style="display: block;border-style: none" href="#:editUrl#"><span class="km-icon km-compose"></span></a>
+                        <a id="btn-delete-discussion-reply" class="pull-right margin-16" style="display: block;border-style: none" onclick="CommunityApp.threadPosts.viewModel.deleteForumPost(#:PostThread.Id#, #:Id#)"><span class="km-icon km-delete"></span></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="margin-1">
+                    <div class="arrow-up"></div>
+                    <div class="callout-1">
+                        <p>#= Body #</p>
+                    </div>
+                </div>
+                #if(PostAttachments && PostAttachments != null && PostAttachments.length > 0 && PostAttachments[0] != null) {#
+                    #if(PostAttachments[0].IsImage){#
+                        <div id="attachmentContainer_#:PostAttachments[0].AttachmentId#" class="margin-1">
+                            <button class="delete-attachment-btn pull-right km-icon km-x km-widget km-button #if(!allowedEdit) {#display-none#}#" data-role="button" data-param="#:PostAttachments[0].AttachmentId#_o" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+                            <img src="#:PostAttachments[0].FileUrl#" class="img-responsive width-full img-thumbnail img-attachment"/>
+                        </div>
+                    #} else {#
+                        <div id="attachmentContainer_#:PostAttachments[0].AttachmentId#" class="margin-1">
+                            <button class="delete-attachment-btn pull-right km-icon km-x km-widget km-button #if(!allowedEdit) {#display-none#}#" data-role="button" data-param="#:PostAttachments[0].AttachmentId#_o" onclick="CommunityApp.threadPosts.viewModel.deletePostAttachment(this);"></button>
+							<a onclick="CommunityApp.threadPosts.viewModel.redirectNoImageAttachmentOfReply('#:PostAttachments[0].FileUrl#')" class="black no-text-decoration">View Attachment</a>
+                        </div>
+                    #}#
+                #}#
+                <div class="social-info-container margin-3">
+                    <small class="social-info fontsize-11 color-nova margin-3">
+                        # if (SocialInfo !== null && SocialInfo.LikesCount > 1) {#
+                        #:SocialInfo.LikesCount# Likes
+                        # } else if (SocialInfo.LikesCount == 1) { #
+                        1 Like
+                        #}#
+                    </small>
+                </div>
+                <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize padding-0 margin-23 margin-25" id="statusActions">
+                    <li class="centerAlign social #if(!(SocialInfo !== null && SocialInfo.UserLiked)){#display-none#}#"><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.threadPosts.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart-empty margin-5 display-inline-block"></span>Unlike</a></li>
+                    <li class="centerAlign social #if(SocialInfo !== null && SocialInfo.UserLiked){#display-none#}#"><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.threadPosts.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration light-blue"><span class="km-icon km-heart margin-5 display-inline-block"></span>Like</a></li>
+                    <li class="centerAlign"><a href="\\#ca-thread-post-reply?postId=#:Id#&threadId=#:ThreadId#&level=#:PostLevel#&sectionId=#:SectionId#&subject=#:Subject#" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5 display-inline-block"></span>Reply</a></li>
+                    #if(PostAttachments && PostAttachments != null && PostAttachments.length > 0 && PostAttachments[0] != null && PostAttachments[0].IsImage) {#
+                    <li class="centerAlign" id="attachmentContainer_#:PostAttachments[0].AttachmentId#_download"><a data-image="#:PostAttachments[0].FileUrl#" class="no-text-decoration btn-comment" onclick = "CommunityApp.threadPosts.viewModel.download(this);"><span class="km-icon km-download margin-5 display-inline-block"></span>Download</a></li>
+                    #}#
+                </ul>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Add Thread" id="ca-thread-add" data-layout="ca-main-layout" data-model="CommunityApp.newThread.viewModel" data-show="CommunityApp.newThread.viewModel.load">
+        <div data-bind="visible: dataBound">
+            <center><h2 data-bind="text: sectionName"></h2></center>
+            <form id="add-thread-form" onsubmit="return false;">
+                <ul data-role="listview" data-style="inset" style="padding: 50px 20px 0 20px">
+                    <li>
+                        <div class="inner-addon left-addon">
+                            <input type="text" data-bind="value: subject" id="txt-subject" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Subject is required');" placeholder="Subject" required class="width-full" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="inner-addon left-addon">
+                            <textarea data-bind="value: body" id="txt-body" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A body is required');" placeholder="Body" required class="height-12 width-full"></textarea>
+                        </div>
+                    </li>
+                    <li class="padding-22">
+                        <label class="width-full">
+                            <span class="nova-dark fontsize-14">Attachment</span>
+                            <input id="attchUploadNew" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" accept="image/*" />
+                            <canvas id="discussion-attachment-canvas-newthread" data-bind="invisible: forGiphy" class="thumb-small margin-17"></canvas>
+							<canvas id="discussion-attachment-canvas-new-upload" class="display-none" style="width:623px;"></canvas>
+							<img data-bind="attr: {src: selectedFixedWidthGiphy}, visible: forGiphy" class="thumb-small margin-17">
+                            <a data-role="button" class="pull-right fontsize-14 pos-1" data-bind="click: selectResource"><span class="km-icon km-upload"></span>Select</a>
+                        </label>
+                    </li>
+                    <li class="padding-22">
+                        <button name="btn-post" type="submit" class="btn btn-primary width-50 padding-5 bold pull-left fontsize-11"><i class="km-icon km-add"></i>&nbsp;Post Thread</button>
+                        <button name="btn-extra" type="submit" class="btn btn-success width-50 padding-5 bold pull-right fontsize-11" data-bind="visible: uploadExtraFileActive"><i class="km-icon km-upload"></i>&nbsp;Add 2nd Image</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+	
+	<div id="select-resource-dialog" class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto; display: none;">
+		<div id="" style="padding: 0 1em;">
+			<ul class = "survey-item-fieldlist">
+				<li>
+					<input type="radio" name="resourceSelection" id="localResource" value="localResource" class="k-radio" checked>
+					<label class="k-radio-label" for="localResource">DEVICE STORAGE</label>
+				</li>
+				<li>
+					<input type="radio" name="resourceSelection" id="giphyResource" value="giphyResource" class="k-radio">
+					<label class="k-radio-label" for="giphyResource">GIF LIBRARY</label>
+				</li>
+			</ul>
+		</div>
+		<div class="k-edit-buttons k-state-default">
+			<button class="k-dialog-insert k-button k-primary" onclick="CommunityApp.selectGiphy.viewModel.controlViewOnPopup()">Ok</button>
+		</div>
+	</div>
+	
+	<div data-role="view" data-title="GIF LIBRARY" id="ca-select-giphy" data-layout="ca-main-layout" data-show="CommunityApp.selectGiphy.viewModel.load" data-model="CommunityApp.selectGiphy.viewModel">
+			<div data-role="content" class="giphy-query padding-30 clearfix">
+				<div class="clearfix">
+                    <form id="select-giphy-form" onsubmit="return false;">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <input type="search" data-bind="value: query" id="txt-query" class="width-full"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 padding-0">
+                            <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize padding-0">
+                                <li class="centerAlign social "><a data-bind="click: search" class="no-text-decoration light-blue"><span class="km-icon-label k-i-search-a fontsize-18 display-inline-block"></span></a></li>
+                                <li class="centerAlign social "><a data-bind="click: cancel" class="no-text-decoration light-blue"><span class="km-icon-label k-i-close fontsize-18 display-inline-block"></span></a></li>
+                            </ul>
+                        </div>
+                    </form>
+				</div>
+				<div class="padding-3 clearfix">
+					<p class="col-lg-7 col-md-7 col-sm-7 col-xs-7 padding-0 margin-3" data-bind="html: searchText"></p>
+					<h1 class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding-0 margin-3">
+						<span class="fontsize-12">POWERED BY </span><span class="bold">GIPHY</span>
+					</h1>
+				</div>
+			</div>
+			<div data-role="scroller"  id="giphy-search-result" class="padding-3 height-13 search-result">
+				<div class="row margin-0" data-bind="invisible: inprogress">
+					<div id="giphy-search-result-left" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding-0 border-right-white">
+						<div class="container-fluid padding-0"></div>
+					</div>
+					<div id="giphy-search-result-right" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding-0 border-left-white">
+						<div class="container-fluid padding-0"></div>
+					</div>
+				</div>
+			</div>
+    </div>
+	
+	<script id="giphy-search-result-tmpl" type="text/x-kendo-template">
+		<img class="width-full border-bottom-white-2 giphy-item" src="#:(images.fixed_width_downsampled.url != '')?images.fixed_width_downsampled.url:images.fixed_width.url#" 
+		data-index="#:index#" data-original="#:images.original.url#" width="#:width#" height="#:height#">
+	</script>
+
+    <div data-role="view" data-title="Edit Thread" id="ca-thread-edit" data-layout="ca-main-layout" data-model="CommunityApp.editThread.viewModel" data-show="CommunityApp.editThread.viewModel.load">
+        <div data-bind="visible: dataBound">
+            <center><h2 data-bind="text: sectionName"></h2></center>
+            <form id="edit-thread-form" onsubmit="return false;">
+                <ul data-role="listview" data-style="inset" style="padding: 50px 20px 0 20px">
+                    <li data-bind="visible: notReply">
+                        <div class="inner-addon left-addon">
+                            <input type="text" data-bind="value: subject" id="txt-editSubject" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'Subject is required');" placeholder="Subject" required class="width-full" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="inner-addon left-addon">
+                            <textarea data-bind="value: body" id="txt-editBody" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A body is required');" placeholder="Body" required class="width-full"></textarea>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="width-full">
+                            <span class="nova-dark fontsize-14">Attachment</span>
+                            <input id="attchUploadEdit" type="file" class="display-none" oninvalid="this.setCustomValidity(this.willValidate ? '' : 'A file is required');" accept="image/*" />
+                            <canvas id="discussion-attachment-canvas-editThread" data-bind="invisible: forGiphy" class="thumb-small margin-17"></canvas>
+							<canvas id="discussion-attachment-canvas-edit-upload" class="display-none" style="width:623px;"></canvas>
+							<img data-bind="attr: {src: selectedFixedWidthGiphy}, visible: forGiphy" class="thumb-small margin-17">
+                            <a data-role="button" class="pull-right fontsize-14 pos-1" data-bind="click: selectResource"><span class="km-icon km-upload"></span>Select</a>
+                        </label>
+                    </li>
+                    <li>
+                        <button type="submit" class="btn btn-primary width-full padding-5 bold"><i class="km-icon km-add"></i>&nbsp;Post Thread</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="view" data-title="Q/A" id="ca-thread-qa" data-layout="ca-main-layout" data-show="CommunityApp.threadPosts.viewModel.load" data-model="CommunityApp.threadPosts.viewModel">
+        <div id="thread-qa-main-container" class="main-container" data-bind="visible: dataBound">
+            <article class="feed-article">
+                <a class="bold no-text-decoration" data-bind="attr: { href: profilePage('#ca-user-profile?userId=') }">
+                    <div class="pull-left">
+                        <img data-bind="attr: {src: topPost.PostAuthor.UserProfile.AvatarUrl }" class="km-medium-thumbnail margin-17" />
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-left margin-17">
+                        <div>
+                            <span class="fontsize-12 bold pull-left" data-bind="text: topPost.PostAuthor.UserProfile.FullName"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: topPost.PostAuthor.UserProfile.Title"></span>
+                        </div>
+                        <div>
+                            <span class="fontsize-11 color-gray pull-left" data-bind="text: topPost.RelativeDate"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+                <div class="margin-1 margin-17">
+                    <h2 data-bind="text: topPost.Subject"></h2>
+                    <p class="fontsize-14" data-bind="html: topPost.Body"></p>
+                </div>
+                <div class="margin-1 margin-17" data-bind="visible: hasImageAttachment">
+                    <img data-bind="attr: { src: attachmentUrl }" class="img-responsive" />
+                </div>
+                <div class="margin-1 margin-17" data-bind="visible: hasNonImageAttachment">
+                    <a data-bind="attr: {href: attachmentUrl}" class="no-text-decoration">View Attachment</a>
+                </div>
+                <div class="margin-17 margin-3 height-9">
+                    <span class="fontsize-11 color-blue-gray" data-bind="text: socialMessage"></span>
+                </div>
+                <div class="social">
+                    <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize padding-0 margin-3" id="statusActions">
+                        <li class="centerAlign social" data-bind="visible: topPost.SocialInfo.UserLiked"><a data-bind="attr: { data-id: topPost.Id }, events: { click: unlikePost }" class="no-text-decoration btn-comment"><span class="km-icon km-heart-empty margin-5 display-inline-block"></span>Unlike</a></li>
+                        <li class="centerAlign social" data-bind="invisible: topPost.SocialInfo.UserLiked"><a data-bind="attr: { data-id: topPost.Id }, events: { click: likePost }" class="no-text-decoration btn-comment"><span class="km-icon km-heart margin-5 display-inline-block"></span>Like</a></li>
+                        <li class="centerAlign"><a data-bind="attr: { href: replyPage('#ca-thread-post-reply') }" class="no-text-decoration btn-comment"><span class="km-icon km-comment margin-5 display-inline-block"></span>Reply</a></li>
+                    </ul>
+                </div>
+            </article>
+            <h2 class="margin-1 margin-26">Replies</h2>
+            <div data-bind="invisible: hasReplies">
+                <h3 class="centerAlign margin-1">Be the first to reply to this thread</h3>
+            </div>
+            <div id="thread-qa" class="row margin-1 margin-16" data-bind="visible: hasReplies">
+                <div class="container-fluid padding-0 items"></div>
+            </div>
+        </div>
+    </div>
+
+    <script id="thread-qa-tmpl" type="text/x-kendo-template">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="discussion-item" data-index="#:index#">
+                <div class="line-height-1 margin-1">
+                    <a href="\\#ca-user-profile?userId=#:PostAuthor.Id#">
+                        <img src="#:PostAuthor.UserProfile.AvatarUrl#" class="km-thumbnail" />
+                    </a>
+                    <p class="pos-1">
+                        <div>
+                            <a class="fontsize-11 color-nova" href="\\#ca-user-profile?userId=#:PostAuthor.Id#">#:PostAuthor.UserProfile.FirstName# #:PostAuthor.UserProfile.LastName#</a>
+                        </div>
+                        <div>
+                            <span class="fontsize-11">#:RelativeDate#</span>
+                        </div>
+                    </p>
+                </div>
+                <div class="margin-10 ">
+                    #if(PostStatus == 128){#
+                    <div class="arrow-up suggested"></div>
+                    <div class="callout-1 suggested">
+                        <p>#= Body #</p>
+                    </div>
+                    <div class="margin-7 height-6 suggestedby">
+                        <small class="fontsize-11">Suggested by <a href="\\#ca-user-profile?userId=#:PostAnswerSuggestedByUserId#">#:PostAnswerSuggestedByUserFullname#</a></small>
+                    </div>
+                    #} else if(PostStatus == 64) {#
+                    <div class="arrow-up verified"></div>
+                    <div class="callout-1 verified">
+                        <p>#= Body #</p>
+                    </div>
+                    <div class="margin-7 height-6 verifiedby">
+                        <small class="fontsize-11">Verified by <a href="\\#ca-user-profile?userId=#:PostAnswerVerifiedByUserId#">#:PostAnswerVerifiedByUserFullname#</a></small>
+                    </div>
+                    #} else {#
+                    <div class="arrow-up"></div>
+                    <div class="callout-1">
+                        <p>#= Body #</p>
+                    </div>
+                    <div class="margin-7 height-6">
+                    </div>
+                    #}#
+                </div>
+                #if(PostAttachments && PostAttachments != null && PostAttachments.length > 0 && PostAttachments[0] != null) {#
+                #if(PostAttachments[0].IsImage){#
+                <img src="#:PostAttachments[0].FileUrl#" class="img-responsive margin-1 width-full img-thumbnail" />
+                #} else {#
+                <div class="margin-1">
+                    <a href="#:PostAttachments[0].FileUrl#" target="_blank" class="black no-text-decoration">View Attachment</a>
+                </div>
+                #}#
+                #}#
+                <div class="social-info-container margin-3">
+                    <small class="social-info fontsize-11 color-nova margin-3">
+                        # if (SocialInfo !== null && SocialInfo.LikesCount > 1) {#
+                        #:SocialInfo.LikesCount# Likes
+                        # } else if (SocialInfo.LikesCount == 1) { #
+                        1 Like
+                        #}#
+                    </small>
+                </div>
+                <ul data-role="buttongroup" data-index="0" class="km-small btn-group normalize padding-0 margin-23 margin-25" id="statusActions">
+                    <li class="unlike social #if(!(SocialInfo !== null && SocialInfo.UserLiked)){#display-none#}#"><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.threadPosts.viewModel.likeSuccessCallback }).like('#:Id#', false, this)" data-id="#:Id#" class="no-text-decoration light-blue fontsize-12"><span class="km-icon km-heart-empty margin-5 display-inline-block"></span>Unlike</a></li>
+                    <li class="like social #if(SocialInfo !== null && SocialInfo.UserLiked){#display-none#}#"><a onclick="CommunityApp.post.operations({ likeSuccessCallback: CommunityApp.threadPosts.viewModel.likeSuccessCallback }).like('#:Id#', true, this)" data-id="#:Id#" class="no-text-decoration light-blue fontsize-12"><span class="km-icon km-heart margin-5 display-inline-block"></span>Like</a></li>
+                    <li><a href="\\#ca-thread-post-reply?postId=#:Id#&threadId=#:ThreadId#&level=#:PostLevel#&sectionId=#:SectionId#&subject=#:Subject#" class="no-text-decoration btn-comment fontsize-12"><span class="km-icon km-comment margin-5 display-inline-block"></span>Reply</a></li>
+                    <li class="unsuggest centerAlign padding-7 #if(PostStatus == 128){#display-block#} else {# display-none #}#"><a onclick="CommunityApp.threadPosts.viewModel.suggest('#:Id#', false, this)" class="no-text-decoration btn-comment color-pink fontsize-12" data-suggest="false" data-id="#:Id#"><span class="km-icon km-question margin-5 display-inline-block"></span>Unmark</a></li>
+                    <li class="suggest padding-7 #if(PostStatus != 128 && PostStatus != 64){#display-block#} else {# display-none #}#"><a onclick="CommunityApp.threadPosts.viewModel.suggest('#:Id#', true, this)" class="no-text-decoration btn-comment color-pink fontsize-12" data-suggest="true" data-id="#:Id#"><span class="km-icon km-question margin-5 display-inline-block"></span>Suggest</a></li>
+                    <li class="unverify centerAlign #if(PostStatus == 64){#display-block#} else {# display-none #}#"><a onclick="CommunityApp.threadPosts.viewModel.verify('#:Id#', false, this)" class="no-text-decoration btn-comment color-green fontsize-12" data-verify="false" data-id="#:Id#"><span class="km-icon km-correct margin-5 display-inline-block"></span>Unverify</a></li>
+                    <li class="verify centerAlign #if(PostStatus != 64){#display-block#} else {# display-none #}#"><a onclick="CommunityApp.threadPosts.viewModel.verify('#:Id#', true, this)" class="no-text-decoration btn-comment color-green fontsize-12" data-verify="true" data-id="#:Id#"><span class="km-icon km-correct margin-5 display-inline-block"></span>Verify</a></li>
+                </ul>
+            </div>
+        </div>
+    </script>
+
+    <div data-role="view" data-title="Thread" id="ca-thread" data-layout="ca-main-layout" data-model="CommunityApp.thread.viewModel" data-show="CommunityApp.thread.viewModel.load">
+        <div class="ribbon padding-6">
+            <a class="no-text-decoration" data-bind="attr: { href: sectionPage('#ca-section?sectionId=') }"><h3 class="white bold" data-bind="html: sectionName"></h3></a>
+        </div>
+        <h1 data-bind="html: subject"></h1>
+        <ul data-role="listview">
+            <li>Type <span class="pull-right" data-bind="text: type"></span></li>
+            <li>Followers <span class="pull-right" data-bind="text: followers"></span></li>
+            <li>Replies <span class="pull-right" data-bind="text: totalReplies"></span></li>
+            <li>Views <span class="pull-right" data-bind="text: views"></span></li>
+            <li>Follow <input type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isFollowed" data-change="CommunityApp.thread.viewModel.follow" /></li>
+            <li><a data-bind="attr: { href: threadPage }">View Posts</a><a data-role="detailbutton"><span class="km-icon km-arrow-right-small km-icon-top0"></span></a></li>
+        </ul>
+    </div>
+
+    <div data-role="view" data-title="Main Discussions" id="ca-discussions-main" data-layout="ca-main-layout" data-show="CommunityApp.mainForums.viewModel.load" data-model="CommunityApp.mainForums.viewModel">
+        <div id="main-discussions-list" class="row width-full margin-0" data-bind="visible: dataBound">
+            <div class="container-fluid padding-0">
+            </div>
+        </div>
+    </div>
+
+    <script id="main-discussions-tmpl" type="text/x-kendo-template">
+        <a href="#:ExternalAddress#">
+            <div class="row disc-item width-full margin-0">
+                <div class="col-xs-5 padding-0">
+                    <img src="#:PostAttachments[0].FileUrl#" class="img-responsive thumb-5" />
+                </div>
+                <div class="col-xs-7 padding-0">
+                    <div class="width-75">
+                        <div class="margin-1">
+                            <span class="black bold fontsize-14">#:Subject#</span>
+                        </div>
+                        <div class="margin-3">
+                            <small class="black">#=Body#</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </script>
+    <!--end of views-->
+</body>
+</html>

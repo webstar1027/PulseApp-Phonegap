@@ -1,0 +1,33 @@
+﻿<div data-role="view" data-title="Chat Groups" id="ca-chat-groups" data-layout="ca-main-layout" data-model="CommunityApp.chatGroups.viewModel" data-show="CommunityApp.chatGroups.viewModel.load" data-hide="CommunityApp.chatGroups.viewModel.hide">
+    <div id="chat-groups-container" class="row margin-0"></div>
+</div>
+
+
+<script type="text/x-kendo-template" id="groups-chat-tmpl">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-index="#:index#">
+        <div class="display-table width-full border-3">
+            <div class="width-15 display-table-cell">
+                <div class="pos-32">
+                    <a href="\\#views/chat/group.html?groupId=#:Id#">
+                        <img class="km-medium-thumbnail img-responsive" src="#:ImageUrl#" />
+                    </a>
+                </div>
+            </div>
+            <div class="padding-19 width-75 display-table-cell pos-4">
+                <div class="margin-34">
+                    <a href="\\#views/chat/group.html?groupId=#:Id#"><span class="section-title black bold padding-0">#=Name#</span></a>
+                </div>
+                <div>
+                    <a href="\\#views/chat/group.html?groupId=#:Id#"><p>#=Description#</p></a>
+                </div>
+                <div>
+                    <a href="\\#views/chat/group.html?groupId=#:Id#"><small class="color-gray2 fontsize-11">#:UpdatedAtFormatted#</small></a>
+                </div>
+            </div>
+            <div class="width-10 padding-20 display-table-cell-middle">
+                <a href="\\#views/chat/group.html?groupId=#:Id#"><span class="glyphicon glyphicon-menu-right black"></span></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</script>

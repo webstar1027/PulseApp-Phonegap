@@ -1,0 +1,9 @@
+﻿<div data-role="view" data-title="Competition Report" id="ca-sales-contest-report" data-layout="ca-main-layout" data-model="CommunityApp.contestsSalesReport.viewModel" data-show="CommunityApp.contestsSalesReport.viewModel.load">
+    <ul id="salesReportListView" data-role="listview" data-bind="source: salesReport" data-template="ca-sales-report"></ul>
+</div>
+
+<script id="ca-sales-report" type="text/x-kendo-template">
+    <h2>IMEI \\#: #:imei#</h2>
+    <small class="fontsize-14">#:username#</small><br />
+    <small class="fontsize-11">Pending Approval</small>
+</script>

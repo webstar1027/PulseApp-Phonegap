@@ -1,0 +1,33 @@
+﻿<div data-role="view" data-title="Add Group" id="ca-chat-add-group" data-layout="ca-main-layout" data-model="CommunityApp.group.viewModel" data-show="CommunityApp.group.viewModel.loadAddGroup" data-hide="CommunityApp.group.viewModel.hideAddGroup">
+    <form onsubmit="return false;">
+        <ul data-role="listview" class="list-style-none">
+            <li>
+                <p class="pull-left">
+                    <b>Group Audience</b>
+                </p>
+                <a class="btn btn-default pull-right" href="#views/chat/add-roles.html"><span class="glyphicon glyphicon-eye-close"></span></a>
+                <div class="clearfix"></div>
+                <p>
+                    <div class="width-90">
+                        <div id="group-audience" data-bind="html: selectedRoleNames"></div>
+                    </div>
+                </p>
+            </li>
+            <li>
+                <label>
+                    Group Name
+                    <input type="text" data-bind="value: name" required />
+                </label>
+            </li>
+            <li>
+                <label>
+                    Group Description
+                    <textarea  data-bind="value: description"></textarea>
+                </label>
+            </li>
+            <li>
+                <label><input type="checkbox" name="member-selector" data-bind="checked: allUsersInRoles">All users in roles</label>
+            </li>
+        </ul>
+    </form>
+</div>

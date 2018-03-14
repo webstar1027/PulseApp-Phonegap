@@ -1,0 +1,50 @@
+#cordova-context-menu-wrapper {
+    pointer-events: all;
+    z-index: 9999999999999;
+    position: fixed;
+    top: 0; right: 0; bottom: 25px;
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 0;
+    background: rgba(0,0,0,.55);
+}
+
+#cordova-context-menu {
+    display: block;
+    overflow: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    right: 0; bottom: 25px; left: 0;
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    max-height: 310px;
+    margin: auto;
+    background: rgb(75,75,75);
+}
+
+#cordova-context-menu .cordova-context-menu-entry {
+    display: block;
+    height: 60px;
+    width: 100%;
+    padding: 0 25px;
+    font-size: 16px;
+    line-height: 60px;
+    color: #fff;
+    cursor: pointer;
+}
+#cordova-context-menu span {
+    display: block;
+    height: 40px;
+    width: 100%;
+    padding: 0 10px;
+    font-size: 18px;
+    line-height: 40px;
+    color: #fff;
+    cursor: pointer;
+}
+
+#cordova-context-menu .cordova-context-menu-entry:hover {
+    background: rgba(255,255,255,.15);
+}

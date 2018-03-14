@@ -1,0 +1,48 @@
+﻿<div data-role="view" data-title="Leaderboards" id="ca-user-reports" data-layout="ca-main-layout" data-model="CommunityApp.userReports.viewModel"
+	 data-show="CommunityApp.userReports.viewModel.load" data-stretch="true">
+	<div data-role="content">
+		<div data-bind="visible: regionShow">
+			<div class="padding-5 store-select">
+				<h2 class="display-inline-block">Region : </h2>
+				<input id="dropDownRegion" class="margin-17 dropdown-region"/>
+			</div>
+			<div class="padding-5 reportType-select">
+				<h2 data-bind="text: reportType"></h2>
+			</div>
+		</div>
+	</div>
+	<div data-role="scroller" class="height-24" id="userReportsScroller">
+		<div data-bind="visible: dataBound">
+			<div id="userReports-list" class="row margin-0">
+				<div class="container-fluid padding-0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="userReports-list-tmpl" type="text/x-kendo-template">
+	<div class="height-18 user-reports-item" data-index="#:index#">
+		<a class="bold no-text-decoration" href="\\#ca-user-profile?userId=#:UserId#">
+			<div class="display-inline-block margin-17">
+				<div>
+					<span class="fontsize-12 bold pull-left">#: index+1 #</span>
+				</div>
+			</div>
+			<div class="display-inline-block margin-17">
+				<img src="#:AvatarUrl#" class="km-medium-thumbnail margin-17" />
+				<div class="clearfix"></div>
+			</div>
+			<div class="display-inline-block margin-17">
+				<div>
+					<span class="fontsize-12 bold pull-left margin-9">#: FullName + " | " + Region #</span>
+				</div>
+				<div>
+					<span class="fontsize-11 color-gray pull-left">#:UserTotalPoints#</span>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</a>
+		<div class="clearfix"></div>
+	</div>
+</script>

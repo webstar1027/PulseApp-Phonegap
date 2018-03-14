@@ -1,0 +1,12 @@
+﻿<div data-role="view" data-title="IMEI Entry" id="ca-imei-entry" class="no-backbutton" data-layout="ca-main-layout" data-model="CommunityApp.contestsImei.viewModel" data-show="CommunityApp.contestsImei.viewModel.load">
+    <center>
+        <input type="text" data-bind="value: imei" placeholder="IMEI or MEID" class="imei" pattern=".{15,}" maxlength="15" title="Invalid IMEI" />
+    </center>
+    <ul data-role="listview" data-style="inset">
+        <li>
+            <span>
+                <a data-role="button" data-bind="events: { click: saveImei }" class="km-large km-primary km-justified"><span class="km-icon km-save"></span>Save</a>
+            </span>
+        </li>
+    </ul>
+</div>

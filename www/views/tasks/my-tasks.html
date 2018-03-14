@@ -1,0 +1,73 @@
+﻿<div data-role="view" data-title="My Tasks" id="ca-mytasks" data-layout="ca-main-layout" data-model="CommunityApp.myTasks.viewModel" data-show="CommunityApp.myTasks.viewModel.load">
+    <div data-role="content">
+        <div class="row margin-0 padding-0">
+            <div class="col-xs-6">
+                <select class="form-control margin-27 width-89 fontsize-11" data-bind="source: categories, events: { change: categoryChange }, value: selectedCategoryId" data-template="categories-template"></select>
+            </div>
+            <div class="col-xs-6">
+                <center>
+                    <span class="fontsize-10">Completed</span>
+                    <input type="checkbox" data-role="switch" data-on-label="Yes" data-off-label="No" data-bind="checked: isCompleted, events: { change: filterCompleted }" />
+                </center>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row margin-0 padding-0">
+            <div class="col-xs-6">
+                <select class="form-control margin-27 width-89 fontsize-11" data-bind="value: selectedSortBy, events: { change: sortByChange }">
+                    <option value="0" selected="selected" disabled>- Sort By -</option>
+                    <option value="1">Due Date</option>
+                    <option value="2">Priority</option>
+                </select>
+            </div>
+            <div class="col-xs-6">
+                <select class="form-control margin-27 width-89 fontsize-11" data-bind="value: selectedSortByDirection, events: { change: sortByDirectionChange }">
+                    <option value="0" selected="selected" disabled>- Direction -</option>
+                    <option value="1">Ascending</option>
+                    <option value="2">Descending</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="listscroller" data-role="scroller" class="height-29">
+        <div id="mytasks-container" class="row margin-0" data-bind="visible: dataBound"></div>
+        <div data-bind="visible: noTasks" class="padding-5">
+            <div class="alert alert-warning">No Tasks Found!</div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="mytasks-list-tmpl">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 task-item" data-index="#:index#">
+        <div class="display-table width-full border-3">
+            <div class="padding-19 width-85 display-table-cell">
+                <div class="margin-34">
+                    <a href="\\#views/tasks/task.html?taskId=#:Id#"><span class="section-title black bold padding-0">#=Name#</span></a>
+                </div>
+                <div>
+                    <a href="\\#views/tasks/task.html?taskId=#:Id#"><p>#=ShortDescription#</p></a>
+                </div>
+                <div>
+                    <a href="\\#views/tasks/task.html?taskId=#:Id#"><small class="color-gray2 fontsize-11">Due On: #:ValidToDateFormatted#</small></a>
+                </div>
+            </div>
+            <div class="width-15 padding-20 display-table-cell-middle">
+                <a href="\\#views/tasks/task.html?taskId=#:Id#"><span class="glyphicon glyphicon-menu-right black"></span></a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="pull-right pos-42">
+                <span class="label label-success fontsize-10">#:Category != null? Category.Name: "N/A"#</span>
+            </div>
+            #if(IsCompleted){#
+            <div class="pull-right pos-43">
+                <span class="glyphicon glyphicon-ok color-green"></span>
+            </div>
+            #}#
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="categories-template">
+    <option value="#:Id#">#:Name#</option>
+</script>

@@ -1,0 +1,74 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-legacy-whitelist": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-android-permissions": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-save-image": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-plugin-context-menu": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "171227428626",
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        },
+        "cordova-android-play-services-gradle-release": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.pulsellc.pulse"
+        }
+    }
+}
